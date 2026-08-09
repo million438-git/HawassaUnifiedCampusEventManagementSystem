@@ -1,0 +1,266 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models._event
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">Create Campus Event</h1>
+        <p class="text-muted">
+            Create a new event for the university community.
+        </p>
+    </div>
+
+    <form asp-action="Create" method="post">
+
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger"></div>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Basic Information</h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-3">
+                    <label asp-for="title" class="form-label">
+                        Event Title
+                    </label>
+
+                    <input asp-for="title"
+                           class="form-control"
+                           placeholder="Enter event title" />
+
+                    <span asp-validation-for="title"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="slug" class="form-label">
+                        Slug
+                    </label>
+
+                    <input asp-for="slug"
+                           class="form-control"
+                           placeholder="event-name" />
+
+                    <span asp-validation-for="slug"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="short_description"
+                           class="form-label">
+                        Short Description
+                    </label>
+
+                    <textarea asp-for="short_description"
+                              class="form-control"
+                              rows="3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="description"
+                           class="form-label">
+                        Description
+                    </label>
+
+                    <textarea asp-for="description"
+                              class="form-control"
+                              rows="6"></textarea>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Schedule</h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="start_at"
+                               class="form-label">
+                            Start Date & Time
+                        </label>
+
+                        <input asp-for="start_at"
+                               type="datetime-local"
+                               class="form-control" />
+
+                        <span asp-validation-for="start_at"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="end_at"
+                               class="form-label">
+                            End Date & Time
+                        </label>
+
+                        <input asp-for="end_at"
+                               type="datetime-local"
+                               class="form-control" />
+
+                        <span asp-validation-for="end_at"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="registration_start_at"
+                               class="form-label">
+                            Registration Opens
+                        </label>
+
+                        <input asp-for="registration_start_at"
+                               type="datetime-local"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="registration_end_at"
+                               class="form-label">
+                            Registration Closes
+                        </label>
+
+                        <input asp-for="registration_end_at"
+                               type="datetime-local"
+                               class="form-control" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Registration</h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="capacity"
+                               class="form-label">
+                            Capacity
+                        </label>
+
+                        <input asp-for="capacity"
+                               type="number"
+                               min="1"
+                               class="form-control"
+                               placeholder="Leave empty for unlimited" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="registration_required"
+                               class="form-label">
+                            Registration Required
+                        </label>
+
+                        <select asp-for="registration_required"
+                                class="form-select">
+
+                            <option value="">Select...</option>
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Event Appearance</h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-3">
+                    <label asp-for="image_url"
+                           class="form-label">
+                        Image URL
+                    </label>
+
+                    <input asp-for="image_url"
+                           class="form-control"
+                           placeholder="https://..." />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="online_url"
+                           class="form-label">
+                        Online Meeting URL
+                    </label>
+
+                    <input asp-for="online_url"
+                           class="form-control"
+                           placeholder="https://meet.google.com/..." />
+                </div>
+
+                <div class="form-check mb-3">
+
+                    <input asp-for="is_featured"
+                           class="form-check-input" />
+
+                    <label asp-for="is_featured"
+                           class="form-check-label">
+                        Featured Event
+                    </label>
+
+                </div>
+
+                <div class="form-check">
+
+                    <input asp-for="is_public"
+                           class="form-check-input" />
+
+                    <label asp-for="is_public"
+                           class="form-check-label">
+                        Public Event
+                    </label>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Create Event
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
