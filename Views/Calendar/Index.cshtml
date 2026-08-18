@@ -1,0 +1,565 @@
+@{
+    ViewData["Title"] = "Campus Calendar";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet"
+      href="~/css/calendar.css"
+      asp-append-version="true" />
+
+<div class="calendar-page">
+
+    <!-- ==========================================
+         CALENDAR HERO
+         ========================================== -->
+
+    <section class="calendar-hero">
+
+        <div class="calendar-container">
+
+            <div class="calendar-breadcrumb">
+
+                <a asp-controller="Home"
+                   asp-action="Index">
+                    Home
+                </a>
+
+                <span>/</span>
+
+                <span>Calendar</span>
+
+            </div>
+
+            <div class="calendar-hero-content">
+
+                <div class="hero-text">
+
+                    <span class="hero-label">
+                        HUCEMS CAMPUS CALENDAR
+                    </span>
+
+                    <h1>
+                        Campus Events Calendar
+                    </h1>
+
+                    <p>
+                        Discover academic, technology, social,
+                        sports, career and cultural events
+                        happening across campus.
+                    </p>
+
+                </div>
+
+                <div class="hero-calendar-icon">
+
+                    <i class="bi bi-calendar3"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         MAIN CALENDAR
+         ========================================== -->
+
+    <section class="calendar-section">
+
+        <div class="calendar-container">
+
+            <div class="calendar-layout">
+
+
+                <!-- ==================================
+                     SIDEBAR
+                     ================================== -->
+
+                <aside class="calendar-sidebar">
+
+
+                    <!-- SEARCH -->
+
+                    <div class="sidebar-card">
+
+                        <div class="sidebar-heading">
+
+                            <i class="bi bi-search"></i>
+
+                            <span>
+                                Search Events
+                            </span>
+
+                        </div>
+
+                        <div class="event-search">
+
+                            <i class="bi bi-search"></i>
+
+                            <input type="text"
+                                   id="eventSearch"
+                                   placeholder="Search events..."
+                                   autocomplete="off" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FILTER -->
+
+                    <div class="sidebar-card">
+
+                        <div class="sidebar-heading">
+
+                            <i class="bi bi-funnel"></i>
+
+                            <span>
+                                Event Categories
+                            </span>
+
+                        </div>
+
+
+                        <div class="category-list">
+
+
+                            <label class="category-filter">
+
+                                <input type="checkbox"
+                                       value="academic"
+                                       checked />
+
+                                <span class="category-color academic"></span>
+
+                                <span>
+                                    Academic
+                                </span>
+
+                            </label>
+
+
+                            <label class="category-filter">
+
+                                <input type="checkbox"
+                                       value="technology"
+                                       checked />
+
+                                <span class="category-color technology"></span>
+
+                                <span>
+                                    Technology
+                                </span>
+
+                            </label>
+
+
+                            <label class="category-filter">
+
+                                <input type="checkbox"
+                                       value="social"
+                                       checked />
+
+                                <span class="category-color social"></span>
+
+                                <span>
+                                    Social
+                                </span>
+
+                            </label>
+
+
+                            <label class="category-filter">
+
+                                <input type="checkbox"
+                                       value="sports"
+                                       checked />
+
+                                <span class="category-color sports"></span>
+
+                                <span>
+                                    Sports
+                                </span>
+
+                            </label>
+
+
+                            <label class="category-filter">
+
+                                <input type="checkbox"
+                                       value="career"
+                                       checked />
+
+                                <span class="category-color career"></span>
+
+                                <span>
+                                    Career
+                                </span>
+
+                            </label>
+
+
+                            <label class="category-filter">
+
+                                <input type="checkbox"
+                                       value="cultural"
+                                       checked />
+
+                                <span class="category-color cultural"></span>
+
+                                <span>
+                                    Cultural
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- UPCOMING EVENTS -->
+
+                    <div class="sidebar-card">
+
+                        <div class="sidebar-heading">
+
+                            <i class="bi bi-clock-history"></i>
+
+                            <span>
+                                Upcoming Events
+                            </span>
+
+                        </div>
+
+                        <div id="upcomingEvents">
+                        </div>
+
+                    </div>
+
+                </aside>
+
+
+                <!-- ==================================
+                     CALENDAR CONTENT
+                     ================================== -->
+
+                <div class="calendar-content">
+
+
+                    <!-- CALENDAR CARD -->
+
+                    <div class="calendar-card">
+
+
+                        <!-- TOOLBAR -->
+
+                        <div class="calendar-toolbar">
+
+
+                            <div class="calendar-controls">
+
+                                <button type="button"
+                                        id="previousMonth"
+                                        class="calendar-button">
+
+                                    <i class="bi bi-chevron-left"></i>
+
+                                </button>
+
+
+                                <button type="button"
+                                        id="nextMonth"
+                                        class="calendar-button">
+
+                                    <i class="bi bi-chevron-right"></i>
+
+                                </button>
+
+
+                                <button type="button"
+                                        id="todayButton"
+                                        class="today-button">
+
+                                    Today
+
+                                </button>
+
+                            </div>
+
+
+                            <h2 id="currentMonth">
+                                Calendar
+                            </h2>
+
+
+                            <div class="calendar-view">
+
+                                <button type="button"
+                                        class="view-button active">
+
+                                    Month
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- WEEK DAYS -->
+
+                        <div class="calendar-weekdays">
+
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+
+                        </div>
+
+
+                        <!-- CALENDAR GRID -->
+
+                        <div id="calendarGrid"
+                             class="calendar-grid">
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================================
+                         SELECTED DAY
+                         ================================== -->
+
+                    <div class="selected-day-card">
+
+
+                        <div class="selected-day-header">
+
+                            <div>
+
+                                <span>
+                                    SELECTED DAY
+                                </span>
+
+                                <h2 id="selectedDayTitle">
+                                    Today's Events
+                                </h2>
+
+                            </div>
+
+
+                            <div id="selectedEventCount"
+                                 class="event-count">
+
+                                0 Events
+
+                            </div>
+
+                        </div>
+
+
+                        <div id="selectedDayEvents"
+                             class="selected-day-events">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         EVENT DETAILS MODAL
+         ========================================== -->
+
+    <div id="eventModal"
+         class="event-modal"
+         aria-hidden="true">
+
+
+        <div id="modalOverlay"
+             class="modal-overlay">
+        </div>
+
+
+        <div class="event-modal-box">
+
+
+            <button type="button"
+                    id="closeModal"
+                    class="modal-close">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+
+            <span id="modalCategory"
+                  class="modal-category">
+
+                Academic
+
+            </span>
+
+
+            <h2 id="modalTitle">
+                Event Title
+            </h2>
+
+
+            <div class="modal-information">
+
+
+                <div class="modal-information-item">
+
+                    <div class="modal-icon">
+
+                        <i class="bi bi-calendar3"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small>
+                            Date
+                        </small>
+
+                        <strong id="modalDate">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-information-item">
+
+                    <div class="modal-icon">
+
+                        <i class="bi bi-clock"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small>
+                            Time
+                        </small>
+
+                        <strong id="modalTime">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-information-item">
+
+                    <div class="modal-icon">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small>
+                            Location
+                        </small>
+
+                        <strong id="modalLocation">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-information-item">
+
+                    <div class="modal-icon">
+
+                        <i class="bi bi-person"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small>
+                            Organizer
+                        </small>
+
+                        <strong id="modalOrganizer">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-description">
+
+                <h3>
+                    About This Event
+                </h3>
+
+                <p id="modalDescription">
+                    -
+                </p>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button type="button"
+                        id="closeModalButton"
+                        class="modal-secondary">
+
+                    Close
+
+                </button>
+
+
+                <button type="button"
+                        id="viewEventButton"
+                        class="modal-primary">
+
+                    <i class="bi bi-arrow-right"></i>
+
+                    View Event
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="~/js/calendar.js"
+        asp-append-version="true">
+</script>

@@ -1,0 +1,225 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminUsersViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "User Management";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">👥 User Management</h1>
+        <p class="text-muted small mb-0">Manage campus accounts, permissions, roles, and status controls.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="exportTableToCSV('usersTable', 'hawassa_campus_users.csv')">
+            <i class="bi bi-download me-1"></i>Export CSV
+        </button>
+    </div>
+</div>
+
+<!-- =======================================================
+     SUMMARY METRICS
+     ======================================================= -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-primary-subtle text-primary"><i class="bi bi-people"></i></div>
+            <div>
+                <div class="stat-num">@Model.TotalCount</div>
+                <div class="stat-desc">Total Users</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-success-subtle text-success"><i class="bi bi-check2-circle"></i></div>
+            <div>
+                <div class="stat-num">@Model.ActiveCount</div>
+                <div class="stat-desc">Active Accounts</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-danger-subtle text-danger"><i class="bi bi-slash-circle"></i></div>
+            <div>
+                <div class="stat-num">@Model.SuspendedCount</div>
+                <div class="stat-desc">Suspended Accounts</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-warning-subtle text-warning"><i class="bi bi-clock-history"></i></div>
+            <div>
+                <div class="stat-num">@Model.PendingCount</div>
+                <div class="stat-desc">Pending Verification</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     FILTERS & SEARCH BAR
+     ======================================================= -->
+<div class="admin-card p-3 mb-4">
+    <form method="get" class="row g-2 align-items-center">
+        <div class="col-md-5">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="search" name="search" value="@Model.SearchTerm" class="form-control" placeholder="Search by name, email, username..." data-table-filter="usersTable" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select name="role" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="ALL" selected="@(Model.RoleFilter == null || Model.RoleFilter == "ALL")">All Roles</option>
+                <option value="STUDENT" selected="@(Model.RoleFilter == "STUDENT")">Students</option>
+                <option value="FACULTY" selected="@(Model.RoleFilter == "FACULTY")">Faculty</option>
+                <option value="STAFF" selected="@(Model.RoleFilter == "STAFF")">Staff</option>
+                <option value="ADMIN" selected="@(Model.RoleFilter == "ADMIN")">Administrators</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="ALL" selected="@(Model.StatusFilter == null || Model.StatusFilter == "ALL")">All Statuses</option>
+                <option value="ACTIVE" selected="@(Model.StatusFilter == "ACTIVE")">Active</option>
+                <option value="SUSPENDED" selected="@(Model.StatusFilter == "SUSPENDED")">Suspended</option>
+                <option value="PENDING" selected="@(Model.StatusFilter == "PENDING")">Pending</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <a asp-controller="Admin" asp-action="Users" class="btn btn-sm btn-light border w-100" title="Reset Filters"><i class="bi bi-arrow-counterclockwise"></i></a>
+        </div>
+    </form>
+</div>
+
+<!-- =======================================================
+     USERS TABLE
+     ======================================================= -->
+<div class="admin-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table admin-table" id="usersTable">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email / Contact</th>
+                    <th>Department</th>
+                    <th>Account Type</th>
+                    <th>Status</th>
+                    <th>Activity</th>
+                    <th>Registered</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="admin-avatar" style="width: 32px; height: 32px; font-size: 12px;">
+                                    @(string.IsNullOrEmpty(user.FullName) ? "U" : user.FullName.Substring(0, 1).ToUpper())
+                                </div>
+                                <div>
+                                    <div class="fw-semibold text-dark">@user.FullName</div>
+                                    <small class="text-muted">@@@user.Username</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div>@user.Email</div>
+                            <small class="text-muted">@(user.Phone ?? "No phone")</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">@user.DepartmentName</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary-subtle text-primary border">@user.AccountType</span>
+                        </td>
+                        <td>
+                            @if (user.Status == "ACTIVE")
+                            {
+                                <span class="badge-status badge-active">Active</span>
+                            }
+                            else if (user.Status == "SUSPENDED")
+                            {
+                                <span class="badge-status badge-suspended">Suspended</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-pending">@user.Status</span>
+                            }
+                        </td>
+                        <td>
+                            <small class="d-block text-muted"><i class="bi bi-calendar-event me-1"></i>@user.EventCount events</small>
+                            <small class="d-block text-muted"><i class="bi bi-ticket-perforated me-1"></i>@user.RegistrationCount registrations</small>
+                        </td>
+                        <td class="small text-muted">
+                            @user.CreatedAt.ToString("MMM dd, yyyy")
+                        </td>
+                        <td class="text-end">
+                            <div class="dropdown d-inline-block">
+                                <button class="btn btn-sm btn-light border dropdown-toggle py-1 px-2" type="button" data-bs-toggle="dropdown">
+                                    Manage
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li class="dropdown-header">Change Status</li>
+                                    <li>
+                                        <form asp-controller="Admin" asp-action="UserToggleStatus" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <input type="hidden" name="status" value="ACTIVE" />
+                                            <button type="submit" class="dropdown-item text-success"><i class="bi bi-check-circle me-2"></i>Activate</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form asp-controller="Admin" asp-action="UserToggleStatus" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <input type="hidden" name="status" value="SUSPENDED" />
+                                            <button type="submit" class="dropdown-item text-warning"><i class="bi bi-pause-circle me-2"></i>Suspend</button>
+                                        </form>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li class="dropdown-header">Assign Role</li>
+                                    <li>
+                                        <form asp-controller="Admin" asp-action="UserChangeRole" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <input type="hidden" name="role" value="ADMIN" />
+                                            <button type="submit" class="dropdown-item"><i class="bi bi-shield-lock me-2"></i>Make Admin</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form asp-controller="Admin" asp-action="UserChangeRole" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <input type="hidden" name="role" value="FACULTY" />
+                                            <button type="submit" class="dropdown-item"><i class="bi bi-person-badge me-2"></i>Make Faculty</button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form asp-controller="Admin" asp-action="UserChangeRole" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <input type="hidden" name="role" value="STUDENT" />
+                                            <button type="submit" class="dropdown-item"><i class="bi bi-mortarboard me-2"></i>Make Student</button>
+                                        </form>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-controller="Admin" asp-action="UserDelete" method="post" onsubmit="return confirm('Are you sure you want to permanently delete this user?');">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@user.Id" />
+                                            <button type="submit" class="dropdown-item text-danger"><i class="bi bi-trash me-2"></i>Delete User</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

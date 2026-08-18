@@ -1,0 +1,691 @@
+:root {
+    --purple: #7c3aed;
+    --purple-dark: #4c1d95;
+    --purple-light: #ede9fe;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --white: #ffffff;
+    --background: #faf9ff;
+}
+
+
+/* =========================================
+   GLOBAL
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   HERO
+   ========================================= */
+
+.hero-section {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    padding: 100px 8%;
+    background: linear-gradient( 90deg, rgba(25, 10, 50, .92), rgba(50, 20, 80, .70), rgba(25, 10, 50, .30) ), url("/images/university-event.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient( circle at 80% 30%, rgba(139, 92, 246, .35), transparent 35% );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 9px 16px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 30px;
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(10px);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.hero-content h1 {
+    margin: 0;
+    font-size: clamp(45px, 7vw, 85px);
+    line-height: 1.02;
+    font-weight: 900;
+    letter-spacing: -3px;
+}
+
+    .hero-content h1 span {
+        display: block;
+        color: #c4b5fd;
+    }
+
+.hero-content p {
+    max-width: 680px;
+    margin: 30px 0;
+    color: rgba(255,255,255,.85);
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .3s;
+}
+
+    .hero-btn.primary {
+        color: white;
+        background: var(--purple);
+    }
+
+        .hero-btn.primary:hover {
+            background: #8b5cf6;
+            transform: translateY(-3px);
+        }
+
+    .hero-btn.secondary {
+        color: white;
+        border: 1px solid rgba(255,255,255,.4);
+        background: rgba(255,255,255,.1);
+        backdrop-filter: blur(10px);
+    }
+
+        .hero-btn.secondary:hover {
+            background: rgba(255,255,255,.2);
+        }
+
+.hero-info {
+    display: flex;
+    gap: 45px;
+    margin-top: 50px;
+}
+
+    .hero-info div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hero-info strong {
+        font-size: 28px;
+    }
+
+    .hero-info span {
+        color: rgba(255,255,255,.65);
+        font-size: 13px;
+    }
+
+
+/* =========================================
+   SCROLL INDICATOR
+   ========================================= */
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255,255,255,.7);
+    font-size: 12px;
+}
+
+.scroll-arrow {
+    font-size: 22px;
+    animation: scrollDown 1.5s infinite;
+}
+
+@keyframes scrollDown {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(8px);
+    }
+}
+
+
+/* =========================================
+   INTRO
+   ========================================= */
+
+.intro-section {
+    padding: 110px 8%;
+    background: var(--white);
+}
+
+.section-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.intro-section .section-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.section-label {
+    color: var(--purple);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.intro-text h2 {
+    margin: 15px 0;
+    color: var(--text);
+    font-size: clamp(35px, 5vw, 55px);
+    line-height: 1.1;
+}
+
+    .intro-text h2 span {
+        display: block;
+        color: var(--purple);
+    }
+
+.intro-text p {
+    max-width: 550px;
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.text-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--purple);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.intro-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.mini-card {
+    padding: 28px;
+    border: 1px solid #eee;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 15px 40px rgba(0,0,0,.05);
+    transition: .3s;
+}
+
+    .mini-card:last-child {
+        grid-column: span 2;
+    }
+
+    .mini-card:hover {
+        transform: translateY(-6px);
+        border-color: #ddd6fe;
+    }
+
+.mini-icon {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: var(--purple-light);
+    font-size: 25px;
+}
+
+.mini-card h3 {
+    color: var(--text);
+}
+
+.mini-card p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   EVENT CELEBRATION
+   ========================================= */
+
+.event-celebration {
+    position: relative;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    padding: 100px 8%;
+    background: linear-gradient( 90deg, rgba(24, 8, 45, .9), rgba(50, 20, 80, .55), rgba(20, 10, 40, .75) ), url("/images/university-event.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+}
+
+.celebration-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 180deg, rgba(0,0,0,.1), rgba(0,0,0,.3) );
+}
+
+.celebration-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+}
+
+.section-label.light {
+    color: #c4b5fd;
+}
+
+.celebration-content h2 {
+    margin: 15px 0;
+    font-size: clamp(40px, 6vw, 70px);
+    line-height: 1.05;
+}
+
+    .celebration-content h2 span {
+        display: block;
+        color: #c4b5fd;
+    }
+
+.celebration-content p {
+    max-width: 650px;
+    color: rgba(255,255,255,.82);
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.celebration-button {
+    display: inline-flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    background: white;
+    color: var(--purple-dark);
+    text-decoration: none;
+    font-weight: 700;
+    transition: .3s;
+}
+
+    .celebration-button:hover {
+        transform: translateY(-3px);
+        background: #ede9fe;
+    }
+
+
+/* =========================================
+   FEATURES
+   ========================================= */
+
+.features-section {
+    padding: 110px 8%;
+    background: var(--background);
+}
+
+.section-title {
+    max-width: 650px;
+    margin: 0 auto 55px;
+    text-align: center;
+}
+
+    .section-title h2 {
+        margin: 12px 0;
+        color: var(--text);
+        font-size: clamp(35px, 5vw, 50px);
+    }
+
+    .section-title p {
+        color: var(--muted);
+    }
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.feature-card {
+    padding: 30px;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    background: white;
+    text-decoration: none;
+    color: inherit;
+    transition: .3s;
+}
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        border-color: #ddd6fe;
+        box-shadow: 0 20px 50px rgba(76,29,149,.10);
+    }
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: var(--purple-light);
+    font-size: 27px;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    color: var(--text);
+}
+
+.feature-card p {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.feature-card span {
+    color: var(--purple);
+    font-weight: 700;
+}
+
+
+/* =========================================
+   STATISTICS
+   ========================================= */
+
+.statistics-section {
+    padding: 80px 8%;
+    background: linear-gradient( 135deg, var(--purple-dark), var(--purple) );
+    color: white;
+}
+
+.statistics-container {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 30px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 50px;
+    font-weight: 900;
+}
+
+.stat-label {
+    color: #ddd6fe;
+    margin-top: 5px;
+}
+
+
+/* =========================================
+   PROCESS
+   ========================================= */
+
+.process-section {
+    padding: 110px 8%;
+    background: white;
+}
+
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+}
+
+.process-card {
+    padding: 30px;
+    border-radius: 18px;
+    background: var(--background);
+    transition: .3s;
+}
+
+    .process-card:hover {
+        transform: translateY(-5px);
+    }
+
+.process-number {
+    color: var(--purple);
+    font-size: 14px;
+    font-weight: 900;
+    margin-bottom: 30px;
+}
+
+.process-card h3 {
+    color: var(--text);
+}
+
+.process-card p {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   FINAL CTA
+   ========================================= */
+
+.final-cta {
+    position: relative;
+    padding: 120px 8%;
+    text-align: center;
+    background: linear-gradient( 135deg, rgba(76,29,149,.96), rgba(124,58,237,.9) ), url("/images/university-event.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.final-cta-content {
+    max-width: 850px;
+    margin: auto;
+}
+
+.final-cta h2 {
+    margin: 20px 0;
+    font-size: clamp(40px, 6vw, 65px);
+    line-height: 1.05;
+}
+
+.final-cta p {
+    color: rgba(255,255,255,.8);
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+
+/* =========================================
+   SCROLL REVEAL
+   ========================================= */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(45px);
+    transition: opacity .8s ease, transform .8s ease;
+}
+
+    .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 1000px) {
+
+    .hero-section {
+        min-height: 850px;
+        padding: 100px 6%;
+    }
+
+    .intro-section .section-container {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .process-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .statistics-container {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 650px) {
+
+    .hero-section {
+        min-height: 850px;
+        padding: 90px 20px 70px;
+        background-position: center;
+    }
+
+    .hero-content h1 {
+        font-size: 48px;
+        letter-spacing: -2px;
+    }
+
+    .hero-content p {
+        font-size: 16px;
+    }
+
+    .hero-info {
+        gap: 20px;
+        justify-content: center;
+    }
+
+        .hero-info strong {
+            font-size: 22px;
+        }
+
+    .scroll-indicator {
+        display: none;
+    }
+
+    .intro-section,
+    .features-section,
+    .process-section {
+        padding: 75px 20px;
+    }
+
+    .intro-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .mini-card:last-child {
+        grid-column: auto;
+    }
+
+    .event-celebration {
+        min-height: 650px;
+        padding: 80px 20px;
+        background-attachment: scroll;
+    }
+
+    .celebration-content h2 {
+        font-size: 45px;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .process-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .statistics-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-number {
+        font-size: 38px;
+    }
+
+    .final-cta {
+        padding: 90px 20px;
+    }
+
+        .final-cta h2 {
+            font-size: 42px;
+        }
+}
+
+
+/* =========================================
+   SMALL PHONES
+   ========================================= */
+
+@media (max-width: 400px) {
+
+    .hero-content h1 {
+        font-size: 40px;
+    }
+
+    .hero-info {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .statistics-container {
+        grid-template-columns: 1fr;
+    }
+}

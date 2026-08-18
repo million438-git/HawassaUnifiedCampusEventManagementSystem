@@ -1,0 +1,134 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminCommentsFeedbackViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Comments & Feedback Moderation";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">💬 Comments & Feedback Moderation</h1>
+        <p class="text-muted small mb-0">Moderate campus event discussions, monitor community feedback, and delete inappropriate content.</p>
+    </div>
+</div>
+
+<!-- =======================================================
+     METRICS
+     ======================================================= -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-primary-subtle text-primary"><i class="bi bi-chat-left-dots"></i></div>
+            <div>
+                <div class="stat-num">@Model.TotalComments</div>
+                <div class="stat-desc">Event Discussions</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-warning-subtle text-warning"><i class="bi bi-star-fill"></i></div>
+            <div>
+                <div class="stat-num">@Model.AverageRating.ToString("F1") / 5.0</div>
+                <div class="stat-desc">Average Event Satisfaction</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-info-subtle text-info"><i class="bi bi-card-checklist"></i></div>
+            <div>
+                <div class="stat-num">@Model.TotalFeedbacks</div>
+                <div class="stat-desc">Feedback Submissions</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     COMMENTS MODERATION TABLE
+     ======================================================= -->
+<div class="admin-card p-4 mb-4">
+    <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-chat-quote me-2 text-primary"></i>Event Comments & Discussions</h2>
+    <div class="table-responsive">
+        <table class="table admin-table" id="commentsTable">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>User</th>
+                    <th>Comment</th>
+                    <th>Posted At</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model.Comments)
+                {
+                    <tr>
+                        <td class="fw-semibold text-dark">@c.EventTitle</td>
+                        <td><small class="text-muted"><i class="bi bi-person me-1"></i>@c.UserName</small></td>
+                        <td style="max-width: 350px;">
+                            <div class="small text-dark">@c.CommentText</div>
+                            @if (c.IsFlagged)
+                            {
+                                <span class="badge bg-danger-subtle text-danger" style="font-size: 10px;"><i class="bi bi-flag-fill me-1"></i>Flagged</span>
+                            }
+                        </td>
+                        <td class="small text-muted">@c.CreatedAt.ToString("MMM dd, yyyy hh:mm tt")</td>
+                        <td class="text-end">
+                            <form asp-controller="Admin" asp-action="CommentDelete" asp-route-id="@c.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this comment?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-light border text-danger py-1 px-2" title="Delete Comment">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- =======================================================
+     FEEDBACK SUBMISSIONS TABLE
+     ======================================================= -->
+<div class="admin-card p-4">
+    <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-hand-thumbs-up me-2 text-success"></i>Attendee Ratings & Feedback</h2>
+    <div class="table-responsive">
+        <table class="table admin-table" id="feedbackTable">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Attendee</th>
+                    <th>Rating</th>
+                    <th>Feedback Review</th>
+                    <th>Submitted At</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in Model.Feedbacks)
+                {
+                    <tr>
+                        <td class="fw-semibold text-dark">@f.EventTitle</td>
+                        <td><small class="text-muted">@f.UserName</small></td>
+                        <td>
+                            <div class="text-warning">
+                                @for (int i = 0; i < f.Rating; i++)
+                                {
+                                    <i class="bi bi-star-fill"></i>
+                                }
+                                @for (int i = f.Rating; i < 5; i++)
+                                {
+                                    <i class="bi bi-star text-muted"></i>
+                                }
+                            </div>
+                        </td>
+                        <td class="small text-dark">@(f.FeedbackText ?? "No text review provided")</td>
+                        <td class="small text-muted">@f.CreatedAt.ToString("MMM dd, yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

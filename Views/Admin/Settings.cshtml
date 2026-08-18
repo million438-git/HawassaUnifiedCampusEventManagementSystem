@@ -1,0 +1,104 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminSettingsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "System Settings";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">⚙️ System Settings & Policies</h1>
+        <p class="text-muted small mb-0">Platform governance, approval workflows, university configurations, and maintenance switches.</p>
+    </div>
+</div>
+
+<form asp-controller="Admin" asp-action="Settings" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="row g-4">
+        <!-- GENERAL CONFIGURATION -->
+        <div class="col-lg-6">
+            <div class="admin-card p-4 h-100">
+                <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-sliders me-2 text-primary"></i>General University Hub Information</h2>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">University Name</label>
+                    <input type="text" asp-for="UniversityName" class="form-control form-control-sm" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Campus Title / Hub Name</label>
+                    <input type="text" asp-for="CampusName" class="form-control form-control-sm" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Portal Website Title</label>
+                    <input type="text" asp-for="WebsiteTitle" class="form-control form-control-sm" required />
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold">Official Contact Email</label>
+                        <input type="email" asp-for="ContactEmail" class="form-control form-control-sm" required />
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small fw-semibold">Contact Phone</label>
+                        <input type="tel" asp-for="ContactPhone" class="form-control form-control-sm" required />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Default Timezone</label>
+                    <input type="text" asp-for="DefaultTimezone" class="form-control form-control-sm" readonly />
+                </div>
+            </div>
+        </div>
+
+        <!-- WORKFLOW & GOVERNANCE POLICIES -->
+        <div class="col-lg-6">
+            <div class="admin-card p-4 h-100 d-flex flex-direction-column justify-content-between">
+                <div>
+                    <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-shield-check me-2 text-success"></i>Workflow Policies & Switches</h2>
+
+                    <div class="p-3 border rounded-3 bg-light mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="RequireEventApproval" id="approvalSwitch" />
+                            <label class="form-check-label fw-bold text-dark" for="approvalSwitch">Require Administrator Approval for Events</label>
+                        </div>
+                        <small class="text-muted d-block ps-4">When enabled, newly created events remain in pending state until an admin approves.</small>
+                    </div>
+
+                    <div class="p-3 border rounded-3 bg-light mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="AllowPublicRegistrations" id="publicRegSwitch" />
+                            <label class="form-check-label fw-bold text-dark" for="publicRegSwitch">Allow Public Registrations</label>
+                        </div>
+                        <small class="text-muted d-block ps-4">Permits verified guest and student attendees to register for open campus events.</small>
+                    </div>
+
+                    <div class="p-3 border rounded-3 bg-light mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="EnableEmailNotifications" id="emailSwitch" />
+                            <label class="form-check-label fw-bold text-dark" for="emailSwitch">Automatic Email & Push Notifications</label>
+                        </div>
+                        <small class="text-muted d-block ps-4">Send automatic confirmation and reminder emails for events.</small>
+                    </div>
+
+                    <div class="p-3 border rounded-3 bg-light mb-3 border-danger-subtle">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="MaintenanceMode" id="maintenanceSwitch" />
+                            <label class="form-check-label fw-bold text-danger" for="maintenanceSwitch">System Maintenance Mode</label>
+                        </div>
+                        <small class="text-muted d-block ps-4">When active, non-admin campus users see a scheduled maintenance notice.</small>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-top text-end">
+                    <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                        <i class="bi bi-check2-circle me-1"></i>Save System Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,324 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.Events
+
+@{
+    ViewData["Title"] = "Edit Event";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/events.css"
+          asp-append-version="true" />
+
+}
+
+<div class="event-form-page">
+
+    <div class="container event-form-container">
+
+        <div class="event-form-header">
+
+            <span class="events-eyebrow">
+                HUCEMS EVENTS
+            </span>
+
+            <h1>
+                Edit Event
+            </h1>
+
+            <p>
+                Update the information for this campus event.
+            </p>
+
+        </div>
+
+
+        <form asp-controller="Events"
+              asp-action="Edit"
+              asp-route-id="@Model.Id"
+              method="post"
+              class="event-form">
+
+            @Html.AntiForgeryToken()
+
+            <input asp-for="Id"
+                   type="hidden" />
+
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger">
+            </div>
+
+
+            <!-- EVENT INFORMATION -->
+
+            <div class="event-form-section">
+
+                <h2>
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    Event Information
+
+                </h2>
+
+
+                <div class="event-form-grid">
+
+                    <div class="event-form-field full">
+
+                        <label asp-for="Title">
+                            Event Title
+                        </label>
+
+                        <input asp-for="Title" />
+
+                        <span asp-validation-for="Title"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="Category">
+                            Category
+                        </label>
+
+                        <select asp-for="Category">
+
+                            <option>
+                                Academic
+                            </option>
+
+                            <option>
+                                Technology
+                            </option>
+
+                            <option>
+                                Cybersecurity
+                            </option>
+
+                            <option>
+                                Business
+                            </option>
+
+                            <option>
+                                Culture
+                            </option>
+
+                            <option>
+                                Sports
+                            </option>
+
+                            <option>
+                                Social
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="Capacity">
+                            Capacity
+                        </label>
+
+                        <input asp-for="Capacity"
+                               type="number"
+                               min="1" />
+
+                    </div>
+
+
+                    <div class="event-form-field full">
+
+                        <label asp-for="Description">
+                            Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  rows="6"></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div class="event-form-section">
+
+                <h2>
+
+                    <i class="bi bi-calendar-event"></i>
+
+                    Date, Time & Location
+
+                </h2>
+
+
+                <div class="event-form-grid">
+
+                    <div class="event-form-field">
+
+                        <label asp-for="EventDate">
+                            Event Date
+                        </label>
+
+                        <input asp-for="EventDate"
+                               type="date" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="Venue">
+                            Venue
+                        </label>
+
+                        <input asp-for="Venue" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="StartTime">
+                            Start Time
+                        </label>
+
+                        <input asp-for="StartTime"
+                               type="time" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="EndTime">
+                            End Time
+                        </label>
+
+                        <input asp-for="EndTime"
+                               type="time" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORGANIZER -->
+
+            <div class="event-form-section">
+
+                <h2>
+
+                    <i class="bi bi-person-badge"></i>
+
+                    Organizer
+
+                </h2>
+
+
+                <div class="event-form-grid">
+
+                    <div class="event-form-field">
+
+                        <label asp-for="Organizer">
+                            Organizer
+                        </label>
+
+                        <input asp-for="Organizer" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="OrganizerEmail">
+                            Email
+                        </label>
+
+                        <input asp-for="OrganizerEmail"
+                               type="email" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="ContactPhone">
+                            Phone
+                        </label>
+
+                        <input asp-for="ContactPhone"
+                               type="tel" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label class="event-checkbox">
+
+                            <input asp-for="IsPublished" />
+
+                            <span>
+                                Published
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="event-form-actions">
+
+                <a asp-controller="Events"
+                   asp-action="Details"
+                   asp-route-id="@Model.Id"
+                   class="event-cancel-button">
+
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="event-save-button">
+
+                    <i class="bi bi-check-lg"></i>
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

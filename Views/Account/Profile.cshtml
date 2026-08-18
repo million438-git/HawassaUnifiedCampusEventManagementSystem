@@ -1,0 +1,851 @@
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_Layout";
+
+    var userName = ViewData["UserName"]?.ToString() ?? "Million Teshome";
+    var email = ViewData["Email"]?.ToString() ?? "student@hawassauniversity.edu.et";
+    var role = ViewData["Role"]?.ToString() ?? "Student";
+    var department = ViewData["Department"]?.ToString() ?? "Computer Cyber Security";
+    var university = ViewData["University"]?.ToString() ?? "Hawassa University";
+    var userId = ViewData["UserId"]?.ToString() ?? "HUCEMS-2026-001";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/profile.css"
+          asp-append-version="true" />
+
+}
+
+<div class="profile-page">
+
+    <!-- =====================================================
+         PROFILE HEADER
+         ===================================================== -->
+
+    <section class="profile-header">
+
+        <div class="profile-container">
+
+            <!-- Breadcrumb -->
+
+            <div class="profile-breadcrumb">
+
+                <a asp-controller="Home"
+                   asp-action="Index">
+
+                    <i class="bi bi-house-door"></i>
+
+                    Home
+
+                </a>
+
+                <span>/</span>
+
+                <span>
+                    My Profile
+                </span>
+
+            </div>
+
+
+            <!-- Profile Main Header -->
+
+            <div class="profile-main-header">
+
+                <div class="profile-avatar-wrapper">
+
+                    <div class="profile-avatar">
+
+                        <span>
+                            @userName.Substring(0, 1).ToUpper()
+                        </span>
+
+                    </div>
+
+                    <span class="profile-online"></span>
+
+                </div>
+
+
+                <div class="profile-header-info">
+
+                    <span class="profile-status">
+
+                        <i class="bi bi-patch-check-fill"></i>
+
+                        Verified HUCEMS Account
+
+                    </span>
+
+
+                    <h1>
+                        @userName
+                    </h1>
+
+
+                    <p>
+                        @role · @department
+                    </p>
+
+
+                    <div class="profile-meta">
+
+                        <span>
+
+                            <i class="bi bi-building"></i>
+
+                            @university
+
+                        </span>
+
+
+                        <span>
+
+                            <i class="bi bi-envelope"></i>
+
+                            @email
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-header-action">
+
+                    <a class="profile-edit-button"
+                       href="#profile-information">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                        Edit Profile
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROFILE CONTENT
+         ===================================================== -->
+
+    <main class="profile-content">
+
+        <div class="profile-container">
+
+            <div class="profile-grid">
+
+
+                <!-- =================================================
+                     LEFT COLUMN
+                     ================================================= -->
+
+                <div class="profile-left-column">
+
+
+                    <!-- ABOUT CARD -->
+
+                    <section class="profile-card">
+
+                        <div class="profile-card-header">
+
+                            <div>
+
+                                <span class="profile-card-label">
+                                    PROFILE
+                                </span>
+
+                                <h2>
+                                    About Me
+                                </h2>
+
+                            </div>
+
+                            <div class="profile-card-icon">
+
+                                <i class="bi bi-person"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <p class="profile-about-text">
+
+                            Welcome to your HUCEMS profile.
+                            This page provides a central place
+                            to manage your campus identity,
+                            event activity, community
+                            participation, and account
+                            information.
+
+                        </p>
+
+
+                        <div class="profile-information-list">
+
+                            <div class="profile-info-row">
+
+                                <div class="profile-info-icon">
+
+                                    <i class="bi bi-person-badge"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        User ID
+                                    </span>
+
+                                    <strong>
+                                        @userId
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-info-row">
+
+                                <div class="profile-info-icon">
+
+                                    <i class="bi bi-mortarboard"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        Role
+                                    </span>
+
+                                    <strong>
+                                        @role
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-info-row">
+
+                                <div class="profile-info-icon">
+
+                                    <i class="bi bi-building"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        University
+                                    </span>
+
+                                    <strong>
+                                        @university
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-info-row">
+
+                                <div class="profile-info-icon">
+
+                                    <i class="bi bi-book"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        Department
+                                    </span>
+
+                                    <strong>
+                                        @department
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- PROFILE INFORMATION -->
+
+                    <section class="profile-card"
+                             id="profile-information">
+
+                        <div class="profile-card-header">
+
+                            <div>
+
+                                <span class="profile-card-label">
+                                    ACCOUNT
+                                </span>
+
+                                <h2>
+                                    Profile Information
+                                </h2>
+
+                            </div>
+
+                            <div class="profile-card-icon">
+
+                                <i class="bi bi-person-vcard"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-form-grid">
+
+
+                            <div class="profile-field">
+
+                                <label>
+                                    Full Name
+                                </label>
+
+                                <div class="profile-input">
+
+                                    <i class="bi bi-person"></i>
+
+                                    <span>
+                                        @userName
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-field">
+
+                                <label>
+                                    User ID
+                                </label>
+
+                                <div class="profile-input">
+
+                                    <i class="bi bi-fingerprint"></i>
+
+                                    <span>
+                                        @userId
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-field">
+
+                                <label>
+                                    Email Address
+                                </label>
+
+                                <div class="profile-input">
+
+                                    <i class="bi bi-envelope"></i>
+
+                                    <span>
+                                        @email
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-field">
+
+                                <label>
+                                    Account Role
+                                </label>
+
+                                <div class="profile-input">
+
+                                    <i class="bi bi-shield-check"></i>
+
+                                    <span>
+                                        @role
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-field profile-field-full">
+
+                                <label>
+                                    Department
+                                </label>
+
+                                <div class="profile-input">
+
+                                    <i class="bi bi-diagram-3"></i>
+
+                                    <span>
+                                        @department
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-card-footer">
+
+                            <span>
+
+                                <i class="bi bi-info-circle"></i>
+
+                                Profile editing will be available
+                                when account management is connected
+                                to the database.
+
+                            </span>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ACCOUNT SECURITY -->
+
+                    <section class="profile-card">
+
+                        <div class="profile-card-header">
+
+                            <div>
+
+                                <span class="profile-card-label">
+                                    SECURITY
+                                </span>
+
+                                <h2>
+                                    Account Security
+                                </h2>
+
+                            </div>
+
+                            <div class="profile-card-icon">
+
+                                <i class="bi bi-shield-lock"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="security-items">
+
+
+                            <div class="security-item">
+
+                                <div class="security-item-icon">
+
+                                    <i class="bi bi-key"></i>
+
+                                </div>
+
+                                <div class="security-item-content">
+
+                                    <strong>
+                                        Password
+                                    </strong>
+
+                                    <span>
+                                        Keep your account password
+                                        secure and private.
+                                    </span>
+
+                                </div>
+
+                                <a asp-controller="Account"
+                                   asp-action="ForgotPassword">
+
+                                    Change
+
+                                </a>
+
+                            </div>
+
+
+                            <div class="security-item">
+
+                                <div class="security-item-icon">
+
+                                    <i class="bi bi-envelope-check"></i>
+
+                                </div>
+
+                                <div class="security-item-content">
+
+                                    <strong>
+                                        Email Verification
+                                    </strong>
+
+                                    <span>
+                                        Your account email is used
+                                        for account communication.
+                                    </span>
+
+                                </div>
+
+                                <span class="security-badge">
+                                    Active
+                                </span>
+
+                            </div>
+
+
+                            <div class="security-item">
+
+                                <div class="security-item-icon">
+
+                                    <i class="bi bi-shield-check"></i>
+
+                                </div>
+
+                                <div class="security-item-content">
+
+                                    <strong>
+                                        Account Protection
+                                    </strong>
+
+                                    <span>
+                                        Your account should only be
+                                        accessed by you.
+                                    </span>
+
+                                </div>
+
+                                <span class="security-badge">
+                                    Protected
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- =================================================
+                     RIGHT COLUMN
+                     ================================================= -->
+
+                <aside class="profile-right-column">
+
+
+                    <!-- QUICK ACTIONS -->
+
+                    <section class="profile-card">
+
+                        <div class="profile-card-header">
+
+                            <div>
+
+                                <span class="profile-card-label">
+                                    QUICK ACCESS
+                                </span>
+
+                                <h2>
+                                    Quick Actions
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="quick-actions">
+
+
+                            <a asp-controller="Events"
+                               asp-action="MyEvents"
+                               class="quick-action">
+
+                                <span class="quick-action-icon">
+
+                                    <i class="bi bi-calendar-event"></i>
+
+                                </span>
+
+                                <span>
+
+                                    <strong>
+                                        My Events
+                                    </strong>
+
+                                    <small>
+                                        View your events
+                                    </small>
+
+                                </span>
+
+                                <i class="bi bi-chevron-right"></i>
+
+                            </a>
+
+
+                            <a asp-controller="Events"
+                               asp-action="Create"
+                               class="quick-action">
+
+                                <span class="quick-action-icon">
+
+                                    <i class="bi bi-plus-circle"></i>
+
+                                </span>
+
+                                <span>
+
+                                    <strong>
+                                        Create Event
+                                    </strong>
+
+                                    <small>
+                                        Publish a campus event
+                                    </small>
+
+                                </span>
+
+                                <i class="bi bi-chevron-right"></i>
+
+                            </a>
+
+
+                            <a asp-controller="Calendar"
+                               asp-action="Index"
+                               class="quick-action">
+
+                                <span class="quick-action-icon">
+
+                                    <i class="bi bi-calendar3"></i>
+
+                                </span>
+
+                                <span>
+
+                                    <strong>
+                                        Calendar
+                                    </strong>
+
+                                    <small>
+                                        View campus schedule
+                                    </small>
+
+                                </span>
+
+                                <i class="bi bi-chevron-right"></i>
+
+                            </a>
+
+
+                            <a asp-controller="Community"
+                               asp-action="Index"
+                               class="quick-action">
+
+                                <span class="quick-action-icon">
+
+                                    <i class="bi bi-people"></i>
+
+                                </span>
+
+                                <span>
+
+                                    <strong>
+                                        Community
+                                    </strong>
+
+                                    <small>
+                                        Connect with students
+                                    </small>
+
+                                </span>
+
+                                <i class="bi bi-chevron-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ACCOUNT STATUS -->
+
+                    <section class="profile-card account-status-card">
+
+                        <div class="profile-card-header">
+
+                            <div>
+
+                                <span class="profile-card-label">
+                                    ACCOUNT
+                                </span>
+
+                                <h2>
+                                    Account Status
+                                </h2>
+
+                            </div>
+
+                            <div class="status-check">
+
+                                <i class="bi bi-check-lg"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="account-status">
+
+                            <div class="status-row">
+
+                                <span>
+                                    Account
+                                </span>
+
+                                <strong class="status-active">
+                                    Active
+                                </strong>
+
+                            </div>
+
+
+                            <div class="status-row">
+
+                                <span>
+                                    Email
+                                </span>
+
+                                <strong class="status-active">
+                                    Verified
+                                </strong>
+
+                            </div>
+
+
+                            <div class="status-row">
+
+                                <span>
+                                    Role
+                                </span>
+
+                                <strong>
+                                    @role
+                                </strong>
+
+                            </div>
+
+
+                            <div class="status-row">
+
+                                <span>
+                                    Platform
+                                </span>
+
+                                <strong>
+                                    HUCEMS
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- PRIVACY -->
+
+                    <section class="profile-privacy-card">
+
+                        <div class="profile-privacy-icon">
+
+                            <i class="bi bi-shield-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                Your Privacy Matters
+                            </h3>
+
+                            <p>
+
+                                Learn how HUCEMS handles account
+                                information and protects your
+                                privacy.
+
+                            </p>
+
+
+                            <a asp-controller="Home"
+                               asp-action="Privacy">
+
+                                Privacy Policy
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- LOGOUT -->
+
+                    <div class="profile-logout">
+
+                        <a asp-controller="Account"
+                           asp-action="Login">
+
+                            <i class="bi bi-box-arrow-right"></i>
+
+                            Sign Out
+
+                        </a>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>

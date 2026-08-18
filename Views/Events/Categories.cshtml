@@ -1,0 +1,97 @@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Event Categories";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/events.css"
+          asp-append-version="true" />
+
+}
+
+<div class="events-page">
+
+    <div class="container">
+
+        <div class="events-header">
+
+            <div>
+
+                <span class="events-eyebrow">
+                    EXPLORE
+                </span>
+
+                <h1>
+                    Event Categories
+                </h1>
+
+                <p>
+                    Explore campus activities by category.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="categories-grid">
+
+            @foreach (var category in Model)
+            {
+                <a asp-controller="Events"
+                   asp-action="Index"
+                   asp-route-category="@category.Name"
+                   class="category-card">
+
+                    <div class="category-icon">
+
+                        @if (category.Name == "Technology")
+                        {
+                            <i class="bi bi-cpu"></i>
+                        }
+                        else if (category.Name == "Business")
+                        {
+                            <i class="bi bi-briefcase"></i>
+                        }
+                        else if (category.Name == "Culture")
+                        {
+                            <i class="bi bi-palette"></i>
+                        }
+                        else if (category.Name == "Cybersecurity")
+                        {
+                            <i class="bi bi-shield-lock"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-calendar-event"></i>
+                        }
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            @category.Name
+                        </h2>
+
+                        <span>
+                            @category.Count events
+                        </span>
+
+                    </div>
+
+
+                    <i class="bi bi-arrow-right category-arrow"></i>
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+</div>

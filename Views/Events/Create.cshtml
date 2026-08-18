@@ -1,0 +1,333 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.Event
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/events.css"
+          asp-append-version="true" />
+
+}
+
+<div class="event-form-page">
+
+    <div class="container event-form-container">
+
+        <div class="event-form-header">
+
+            <span class="events-eyebrow">
+                HUCEMS EVENTS
+            </span>
+
+            <h1>
+                Create a New Event
+            </h1>
+
+            <p>
+                Share an activity, workshop, seminar or event
+                with the campus community.
+            </p>
+
+        </div>
+
+
+        <form asp-controller="Events"
+              asp-action="Create"
+              method="post"
+              class="event-form">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger">
+            </div>
+
+
+            <!-- BASIC INFORMATION -->
+
+            <div class="event-form-section">
+
+                <h2>
+                    <i class="bi bi-info-circle"></i>
+                    Event Information
+                </h2>
+
+
+                <div class="event-form-grid">
+
+                    <div class="event-form-field full">
+
+                        <label asp-for="Title">
+                            Event Title
+                        </label>
+
+                        <input asp-for="Title"
+                               placeholder="Enter event title..." />
+
+                        <span asp-validation-for="Title"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="Category">
+                            Category
+                        </label>
+
+                        <select asp-for="Category">
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option>
+                                Academic
+                            </option>
+
+                            <option>
+                                Technology
+                            </option>
+
+                            <option>
+                                Cybersecurity
+                            </option>
+
+                            <option>
+                                Business
+                            </option>
+
+                            <option>
+                                Culture
+                            </option>
+
+                            <option>
+                                Sports
+                            </option>
+
+                            <option>
+                                Social
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="Category"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="Capacity">
+                            Maximum Capacity
+                        </label>
+
+                        <input asp-for="Capacity"
+                               type="number"
+                               min="1"
+                               placeholder="Example: 100" />
+
+                    </div>
+
+
+                    <div class="event-form-field full">
+
+                        <label asp-for="Description">
+                            Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  rows="6"
+                                  placeholder="Describe your event..."></textarea>
+
+                        <span asp-validation-for="Description"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DATE AND LOCATION -->
+
+            <div class="event-form-section">
+
+                <h2>
+                    <i class="bi bi-calendar-event"></i>
+                    Date, Time & Location
+                </h2>
+
+
+                <div class="event-form-grid">
+
+                    <div class="event-form-field">
+
+                        <label asp-for="EventDate">
+                            Event Date
+                        </label>
+
+                        <input asp-for="EventDate"
+                               type="date" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="Venue">
+                            Venue
+                        </label>
+
+                        <input asp-for="Venue"
+                               placeholder="Example: Main Auditorium" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="StartTime">
+                            Start Time
+                        </label>
+
+                        <input asp-for="StartTime"
+                               type="time" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="EndTime">
+                            End Time
+                        </label>
+
+                        <input asp-for="EndTime"
+                               type="time" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORGANIZER -->
+
+            <div class="event-form-section">
+
+                <h2>
+                    <i class="bi bi-person-badge"></i>
+                    Organizer Information
+                </h2>
+
+
+                <div class="event-form-grid">
+
+                    <div class="event-form-field">
+
+                        <label asp-for="Organizer">
+                            Organizer
+                        </label>
+
+                        <input asp-for="Organizer"
+                               placeholder="Club, department or organization" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="OrganizerEmail">
+                            Email
+                        </label>
+
+                        <input asp-for="OrganizerEmail"
+                               type="email"
+                               placeholder="organizer@example.com" />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label asp-for="ContactPhone">
+                            Phone
+                        </label>
+
+                        <input asp-for="ContactPhone"
+                               type="tel"
+                               placeholder="+251..." />
+
+                    </div>
+
+
+                    <div class="event-form-field">
+
+                        <label>
+                            Publishing
+                        </label>
+
+                        <label class="event-checkbox">
+
+                            <input asp-for="IsPublished" />
+
+                            <span>
+                                Publish this event
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="event-form-actions">
+
+                <a asp-controller="Events"
+                   asp-action="Index"
+                   class="event-cancel-button">
+
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="event-save-button">
+
+                    <i class="bi bi-check-lg"></i>
+
+                    Create Event
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

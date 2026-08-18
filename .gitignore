@@ -1,0 +1,38 @@
+## Ignore Visual Studio & .NET build artifacts
+bin/
+obj/
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+*.dbmdl
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio Code / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+## App data & temporary files
+*.log
+*.tmp
+_ReSharper*/
+[Tt]est[Rr]esult*
+[Bb]uild[Ll]og.*

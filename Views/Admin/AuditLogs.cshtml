@@ -1,0 +1,62 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminAuditLogsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Security & Audit Logs";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">🛡️ Security & Audit Trail</h1>
+        <p class="text-muted small mb-0">Immutable records of who, what, when, and where actions were executed across the platform.</p>
+    </div>
+    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="exportTableToCSV('auditLogsTable', 'hawassa_security_audit_logs.csv')">
+        <i class="bi bi-download me-1"></i>Export Log CSV
+    </button>
+</div>
+
+<!-- =======================================================
+     AUDIT LOGS TABLE
+     ======================================================= -->
+<div class="admin-card overflow-hidden">
+    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+        <div class="input-group input-group-sm" style="max-width: 320px;">
+            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+            <input type="search" class="form-control" placeholder="Filter audit trail..." data-table-filter="auditLogsTable" />
+        </div>
+        <span class="badge bg-light text-secondary border">@Model.TotalCount Log Entries</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table admin-table" id="auditLogsTable">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                    <th>User</th>
+                    <th>Entity Scope</th>
+                    <th>IP Address</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model.Logs)
+                {
+                    <tr>
+                        <td class="font-monospace small text-muted">
+                            @log.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                        </td>
+                        <td>
+                            <span class="badge bg-primary-subtle text-primary font-monospace">@log.Action</span>
+                        </td>
+                        <td class="fw-semibold text-dark small">@log.UserName</td>
+                        <td>
+                            <small class="text-muted">@(log.EntityType ?? "SYSTEM") @(log.EntityId.HasValue ? $"#{log.EntityId}" : "")</small>
+                        </td>
+                        <td><code class="small text-muted">@(log.IpAddress ?? "127.0.0.1")</code></td>
+                        <td class="small text-dark">@(log.Description ?? log.Action)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
