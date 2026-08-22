@@ -89,8 +89,18 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<venue> venues { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("Server=localhost;Port=3306;Database=university_event_management;User=root;Password=@root;");
+    {
+        // Only configure the context if it hasn't been configured by DI in Program.cs.
+        // The connection string and provider are configured in Program.cs via AddDbContext.
+        if (optionsBuilder.IsConfigured)
+        {
+            return;
+        }
+
+        // No fallback provider configured here. If you need a fallback for design-time
+        // tools, set the connection string via environment variables or use the
+        // Name= syntax and configuration in appsettings.json.
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
