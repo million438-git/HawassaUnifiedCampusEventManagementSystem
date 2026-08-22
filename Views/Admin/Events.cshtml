@@ -1,0 +1,222 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminEventsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Event Management";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">📅 Event Management & Approvals</h1>
+        <p class="text-muted small mb-0">Control campus events, review pending submissions, approve/reject and manage visibility.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="Events" asp-action="Create" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm">
+            <i class="bi bi-plus-lg"></i>
+            <span>Create New Event</span>
+        </a>
+        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="exportTableToCSV('eventsTable', 'hawassa_campus_events.csv')">
+            <i class="bi bi-download me-1"></i>Export CSV
+        </button>
+    </div>
+</div>
+
+<!-- =======================================================
+     METRICS CARDS
+     ======================================================= -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-primary-subtle text-primary"><i class="bi bi-calendar-event"></i></div>
+            <div>
+                <div class="stat-num">@Model.TotalEvents</div>
+                <div class="stat-desc">Total Events</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-warning-subtle text-warning"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+                <div class="stat-num">@Model.PendingApprovalCount</div>
+                <div class="stat-desc">Pending Approvals</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-success-subtle text-success"><i class="bi bi-check-circle"></i></div>
+            <div>
+                <div class="stat-num">@Model.PublishedCount</div>
+                <div class="stat-desc">Published Live</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-danger-subtle text-danger"><i class="bi bi-x-circle"></i></div>
+            <div>
+                <div class="stat-num">@Model.CancelledCount</div>
+                <div class="stat-desc">Cancelled</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     FILTERS
+     ======================================================= -->
+<div class="admin-card p-3 mb-4">
+    <form method="get" class="row g-2 align-items-center">
+        <div class="col-md-6">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="search" name="search" value="@Model.SearchTerm" class="form-control" placeholder="Search event title or description..." data-table-filter="eventsTable" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="ALL" selected="@(Model.StatusFilter == null || Model.StatusFilter == "ALL")">All Statuses</option>
+                <option value="PENDING" selected="@(Model.StatusFilter == "PENDING")">⏳ Pending Approval</option>
+                <option value="PUBLISHED" selected="@(Model.StatusFilter == "PUBLISHED")">🟢 Published</option>
+                <option value="DRAFT" selected="@(Model.StatusFilter == "DRAFT")">📝 Draft</option>
+                <option value="CANCELLED" selected="@(Model.StatusFilter == "CANCELLED")">🔴 Cancelled</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="ALL" selected="@(Model.CategoryFilter == null || Model.CategoryFilter == "ALL")">All Categories</option>
+                <option value="Academic" selected="@(Model.CategoryFilter == "Academic")">Academic</option>
+                <option value="Technology" selected="@(Model.CategoryFilter == "Technology")">Technology</option>
+                <option value="Sports" selected="@(Model.CategoryFilter == "Sports")">Sports</option>
+                <option value="Culture" selected="@(Model.CategoryFilter == "Culture")">Culture</option>
+                <option value="Workshop" selected="@(Model.CategoryFilter == "Workshop")">Workshop</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <a asp-controller="Admin" asp-action="Events" class="btn btn-sm btn-light border w-100" title="Reset Filters"><i class="bi bi-arrow-counterclockwise"></i></a>
+        </div>
+    </form>
+</div>
+
+<!-- =======================================================
+     EVENTS TABLE
+     ======================================================= -->
+<div class="admin-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table admin-table" id="eventsTable">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Category & Venue</th>
+                    <th>Organizer</th>
+                    <th>Schedule</th>
+                    <th>Registrations</th>
+                    <th>Approval Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evt in Model.Events)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                @if (evt.IsFeatured)
+                                {
+                                    <i class="bi bi-star-fill text-warning" title="Featured Event"></i>
+                                }
+                                <div>
+                                    <div class="fw-bold text-dark">@evt.Title</div>
+                                    <small class="text-muted">
+                                        @(evt.IsPublic ? "Public Event" : "Internal Event") • ID: #@evt.Id
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary-subtle text-secondary mb-1">@evt.CategoryName</span>
+                            <div class="small text-muted"><i class="bi bi-geo-alt me-1"></i>@evt.VenueName</div>
+                        </td>
+                        <td>
+                            <div class="fw-semibold text-dark small">@evt.OrganizerName</div>
+                            @if (!string.IsNullOrEmpty(evt.OrganizationName))
+                            {
+                                <small class="text-muted">@evt.OrganizationName</small>
+                            }
+                        </td>
+                        <td>
+                            <div class="small fw-semibold text-dark">@evt.StartAt.ToString("MMM dd, yyyy")</div>
+                            <small class="text-muted">@evt.StartAt.ToString("hh:mm tt") - @evt.EndAt.ToString("hh:mm tt")</small>
+                        </td>
+                        <td>
+                            <div class="small fw-bold text-dark">@evt.RegistrationCount / @(evt.Capacity.HasValue ? evt.Capacity.ToString() : "∞")</div>
+                            <div class="progress" style="height: 4px; width: 60px;">
+                                @{
+                                    var percent = evt.Capacity.HasValue && evt.Capacity.Value > 0 ? (int)Math.Min(100.0, (double)evt.RegistrationCount / evt.Capacity.Value * 100.0) : 100;
+                                }
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: @(percent)%"></div>
+                            </div>
+                        </td>
+                        <td>
+                            @if (evt.ApprovalStatus == "APPROVED")
+                            {
+                                <span class="badge-status badge-approved">Approved</span>
+                            }
+                            else if (evt.ApprovalStatus == "PENDING")
+                            {
+                                <span class="badge-status badge-pending">Pending</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-rejected">@evt.ApprovalStatus</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-1">
+                                @if (evt.ApprovalStatus == "PENDING")
+                                {
+                                    <form asp-controller="Admin" asp-action="EventApprove" asp-route-id="@evt.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-success py-1 px-2" title="Approve & Publish">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </form>
+                                }
+                                <a asp-controller="Events" asp-action="Details" asp-route-id="@evt.Id" class="btn btn-sm btn-light border py-1 px-2" title="View Public Details" target="_blank">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <div class="dropdown d-inline-block">
+                                    <button class="btn btn-sm btn-light border dropdown-toggle py-1 px-2" type="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                        <li>
+                                            <form asp-controller="Admin" asp-action="EventToggleFeature" asp-route-id="@evt.Id" method="post">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="dropdown-item"><i class="bi bi-star me-2 text-warning"></i>Toggle Featured</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form asp-controller="Admin" asp-action="EventReject" asp-route-id="@evt.Id" method="post">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="dropdown-item text-warning"><i class="bi bi-x-circle me-2"></i>Reject Event</button>
+                                            </form>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                        <li>
+                                            <form asp-controller="Admin" asp-action="EventDelete" asp-route-id="@evt.Id" method="post" onsubmit="return confirm('Permanently delete this event?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="dropdown-item text-danger"><i class="bi bi-trash me-2"></i>Delete Event</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

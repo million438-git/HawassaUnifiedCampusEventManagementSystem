@@ -1,0 +1,88 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AnnouncementDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb small">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Announcements" asp-action="Index">Announcements</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Circular #@Model.Id</li>
+                </ol>
+            </nav>
+
+            <article class="card border-0 shadow-sm rounded-4 p-4 p-md-5 @(Model.IsUrgent ? "border-top border-4 border-danger" : "")">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 pb-3 border-bottom">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge @(Model.IsUrgent ? "bg-danger text-white" : "bg-primary text-white") px-3 py-2 rounded-pill fw-semibold">
+                            <i class="bi @(Model.IsUrgent ? "bi-exclamation-triangle-fill" : "bi-megaphone-fill") me-1"></i>@Model.Priority
+                        </span>
+                        <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill">
+                            @Model.AnnouncementType
+                        </span>
+                    </div>
+
+                    <div class="text-muted small">
+                        <i class="bi bi-calendar3 me-1"></i>Published: @Model.PublishedDate.ToString("dddd, MMMM dd, yyyy - hh:mm tt")
+                    </div>
+                </div>
+
+                <h1 class="display-6 fw-bold text-dark mb-4">@Model.Title</h1>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Summary))
+                {
+                    <div class="p-3 bg-light rounded-3 mb-4 text-secondary fst-italic border-start border-3 border-primary">
+                        @Model.Summary
+                    </div>
+                }
+
+                <div class="announcement-body text-dark mb-5" style="line-height: 1.8; font-size: 1.05rem; white-space: pre-line;">
+                    @Model.Content
+                </div>
+
+                <div class="p-4 bg-light rounded-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                    <div>
+                        <div class="fw-bold text-dark">
+                            <i class="bi bi-person-badge me-1 text-primary"></i>@Model.AuthorName
+                        </div>
+                        <div class="small text-muted">
+                            <i class="bi bi-building me-1"></i>@Model.DepartmentName
+                        </div>
+                    </div>
+
+                    <a asp-controller="Announcements" asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                        <i class="bi bi-arrow-left me-1"></i>Back to All Notices
+                    </a>
+                </div>
+            </article>
+
+            @if (Model.RelatedNotices.Any())
+            {
+                <div class="mt-5">
+                    <h2 class="h5 fw-bold text-dark mb-3"><i class="bi bi-newspaper me-2 text-primary"></i>Other Recent Notices</h2>
+                    <div class="row g-3">
+                        @foreach (var r in Model.RelatedNotices)
+                        {
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0 shadow-sm rounded-3 p-3">
+                                    <span class="badge @r.PriorityBadgeClass align-self-start mb-2 small">@r.Priority</span>
+                                    <h3 class="h6 fw-bold mb-2">
+                                        <a asp-controller="Announcements" asp-action="Details" asp-route-id="@r.Id" class="text-dark text-decoration-none">
+                                            @r.Title
+                                        </a>
+                                    </h3>
+                                    <small class="text-muted mt-auto">@r.PublishedDate.ToString("MMM dd, yyyy")</small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

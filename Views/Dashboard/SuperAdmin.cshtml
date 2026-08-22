@@ -1,0 +1,293 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.SuperAdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "SuperAdmin Dashboard | HUCEMS";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+}
+
+<div class="dashboard-page superadmin-theme py-4">
+    <div class="container-fluid px-lg-4">
+
+        <!-- =====================================================
+             SUPER ADMIN HERO BANNER & ROLE SWITCHER PREVIEW
+             ===================================================== -->
+        <div class="role-hero-banner superadmin-hero mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div class="hero-text">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1 small text-white-50">
+                            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-white-50 text-decoration-none"><i class="bi bi-house-door me-1"></i>Home</a></li>
+                            <li class="breadcrumb-item active text-white" aria-current="page">SuperAdmin Master Platform Console</li>
+                        </ol>
+                    </nav>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <h1 class="hero-title h2 fw-bold text-white mb-0">Master Platform Command &bull; @Model.UserName ⚡</h1>
+                        <span class="badge role-badge bg-white text-dark fw-bold px-3 py-1 shadow-sm">
+                            <i class="bi bi-cpu-fill me-1"></i> SUPER ADMINISTRATOR
+                        </span>
+                    </div>
+                    <p class="text-white-50 mb-0 small">
+                        <i class="bi bi-hdd-rack me-1"></i> Environment: <span class="text-white fw-semibold">@Model.ActiveEnvironment</span> &nbsp;•&nbsp; 
+                        <i class="bi bi-activity me-1"></i> System Health: <span class="text-success fw-bold">@Model.SystemHealthPercent% (All Clusters Green)</span> &nbsp;•&nbsp;
+                        <i class="bi bi-clock-history me-1"></i> Uptime: <span class="text-white fw-semibold">@Model.ServerUptime</span>
+                    </p>
+                </div>
+
+                <div class="hero-actions d-flex flex-wrap align-items-center gap-2">
+                    <a asp-controller="SuperAdmin" asp-action="Index" class="btn btn-warning text-dark fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-cpu-fill"></i>
+                        <span>SuperAdmin Console</span>
+                    </a>
+                    <a asp-controller="Admin" asp-action="Roles" class="btn btn-outline-light d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Roles & RBAC</span>
+                    </a>
+                    <div class="dropdown">
+                        <button class="btn btn-dark bg-dark-subtle border-0 text-white dropdown-toggle small px-2 py-2" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-arrow-left-right me-1"></i> Role Views
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li><h6 class="dropdown-header small">Switch Dashboard Preview</h6></li>
+                            <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Student"><i class="bi bi-mortarboard me-2"></i>Student</a></li>
+                            <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Staff"><i class="bi bi-briefcase me-2"></i>Staff</a></li>
+                            <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Faculty"><i class="bi bi-journal-bookmark me-2"></i>Faculty</a></li>
+                            <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Organization"><i class="bi bi-people me-2"></i>Organization</a></li>
+                            <li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Admin"><i class="bi bi-shield-lock me-2"></i>Admin</a></li>
+                            <li><a class="dropdown-item active" asp-controller="Dashboard" asp-action="SuperAdmin"><i class="bi bi-cpu me-2"></i>SuperAdmin</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             SUPER ADMIN STATS COUNTERS
+             ===================================================== -->
+        <section class="dashboard-stat-grid mb-4">
+            <div class="dashboard-stat-card card border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper bg-dark text-white rounded-3">
+                        <i class="bi bi-database-check fs-3"></i>
+                    </div>
+                    <div>
+                        <span class="stat-label text-muted small d-block">Platform Total Users</span>
+                        <strong class="stat-number fs-3 fw-bold text-dark">@Model.TotalSystemUsersCount.ToString("N0")</strong>
+                        <span class="badge bg-success-subtle text-success small mt-1">Multi-Campus SIS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-stat-card card border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper bg-primary-subtle text-primary rounded-3">
+                        <i class="bi bi-calendar2-range-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <span class="stat-label text-muted small d-block">Lifetime Events</span>
+                        <strong class="stat-number fs-3 fw-bold text-dark">@Model.TotalPlatformEventsCount</strong>
+                        <span class="text-primary small d-block" style="font-size: 11px;">Archived & Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-stat-card card border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper bg-success-subtle text-success rounded-3">
+                        <i class="bi bi-heart-pulse-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <span class="stat-label text-muted small d-block">System Telemetry</span>
+                        <strong class="stat-number fs-3 fw-bold text-dark">100% OK</strong>
+                        <span class="badge bg-success-subtle text-success small mt-1">0 Faults</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-stat-card card border-0 shadow-sm">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="stat-icon-wrapper bg-danger-subtle text-danger rounded-3">
+                        <i class="bi bi-shield-lock-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <span class="stat-label text-muted small d-block">Security Incidents</span>
+                        <strong class="stat-number fs-3 fw-bold text-dark">@Model.SecurityAlertsCount</strong>
+                        <span class="text-success small d-block" style="font-size: 11px;">WAF & TLS Guard Active</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="row g-4">
+            <!-- =====================================================
+                 LEFT & MAIN COLUMN
+                 ===================================================== -->
+            <div class="col-lg-8">
+
+                <!-- REAL-TIME AUDIT SECURITY LOGS STREAM -->
+                <div class="card shadow-sm border-0 mb-4 dashboard-main-card">
+                    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="h5 fw-bold mb-0 text-dark">
+                                <i class="bi bi-terminal-split me-2 text-dark"></i>Real-Time Master Audit Security Stream
+                            </h2>
+                            <small class="text-muted">High-priority authentication events, role escalations, and system mutations</small>
+                        </div>
+                        <a asp-controller="Admin" asp-action="AuditLogs" class="btn btn-sm btn-dark">
+                            Full Audit Vault
+                        </a>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-dark small text-uppercase">
+                                    <tr>
+                                        <th>Action / Event</th>
+                                        <th>Initiator</th>
+                                        <th>IP & Gateway</th>
+                                        <th>Timestamp</th>
+                                        <th>Severity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var log in Model.RealtimeAuditLogs)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold text-dark">@log.Action</td>
+                                            <td class="small text-muted">@log.UserEmail</td>
+                                            <td class="small text-secondary font-monospace">@log.IpAddress</td>
+                                            <td class="small text-muted">@log.Timestamp.ToString("hh:mm:ss tt")</td>
+                                            <td>
+                                                <span class="badge @(log.Severity == "Warning" ? "bg-warning text-dark" : log.Severity == "Success" ? "bg-success" : "bg-info text-dark")">
+                                                    @log.Severity
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SYSTEM SERVICES STATUS & ENGINE HEALTH -->
+                <div class="card shadow-sm border-0 mb-4 dashboard-main-card">
+                    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="h5 fw-bold mb-0 text-dark">
+                                <i class="bi bi-server me-2 text-primary"></i>Core Infrastructure & Subsystem Telemetry
+                            </h2>
+                            <small class="text-muted">Distributed services, database cluster and notification message queues</small>
+                        </div>
+                        <span class="badge bg-success text-white px-2 py-1"><i class="bi bi-check-all me-1"></i>All Online</span>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light small text-uppercase">
+                                    <tr>
+                                        <th>Subsystem Name</th>
+                                        <th>Operational State</th>
+                                        <th>Response Latency</th>
+                                        <th>Health Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var s in Model.SystemServicesStatus)
+                                    {
+                                        <tr>
+                                            <td class="fw-bold text-dark"><i class="bi bi-hdd-network me-2 text-primary"></i>@s.ServiceName</td>
+                                            <td class="small">@s.Status</td>
+                                            <td class="small font-monospace text-muted">@s.Latency</td>
+                                            <td><span class="badge bg-success-subtle text-success"><i class="bi bi-check-circle-fill me-1"></i>Passed</span></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- =====================================================
+                 RIGHT SIDEBAR COLUMN
+                 ===================================================== -->
+            <div class="col-lg-4">
+
+                <!-- SUPER ADMIN MASTER CONTROLS -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h2 class="h6 fw-bold mb-0 text-dark">
+                            <i class="bi bi-shield-lock-fill me-2 text-dark"></i>SuperAdmin Master Controls
+                        </h2>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Admin" asp-action="Settings" class="btn btn-dark text-start d-flex align-items-center justify-content-between p-2 px-3">
+                                <span><i class="bi bi-sliders me-2 text-warning"></i>Global Platform Settings</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                            <a asp-controller="Admin" asp-action="Roles" class="btn btn-light border text-start d-flex align-items-center justify-content-between p-2 px-3">
+                                <span><i class="bi bi-person-lock me-2 text-primary"></i>Role Permissions Matrix</span>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </a>
+                            <a asp-controller="Admin" asp-action="AuditLogs" class="btn btn-light border text-start d-flex align-items-center justify-content-between p-2 px-3">
+                                <span><i class="bi bi-file-earmark-lock2 me-2 text-danger"></i>Full System Audit Logs</span>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </a>
+                            <a asp-controller="Admin" asp-action="DatabaseManagement" class="btn btn-light border text-start d-flex align-items-center justify-content-between p-2 px-3">
+                                <span><i class="bi bi-cloud-arrow-down me-2 text-success"></i>Database Management & Snapshots</span>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USER POPULATION BY ROLE -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h2 class="h6 fw-bold mb-0 text-dark">
+                            <i class="bi bi-pie-chart-fill me-2 text-primary"></i>Campus Role Population
+                        </h2>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-column gap-2">
+                            @foreach (var r in Model.RolesDistribution)
+                            {
+                                <div class="d-flex justify-content-between align-items-center p-2 rounded-2 bg-light">
+                                    <span class="small fw-semibold text-dark">@r.RoleName</span>
+                                    <span class="badge @r.BadgeClass">@r.UserCount.ToString("N0")</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMERGENCY CAMPUS BROADCAST -->
+                <div class="card shadow-sm border-0 bg-dark text-white">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-broadcast text-danger fs-4"></i>
+                            <h6 class="fw-bold mb-0 text-white">Emergency Broadcast</h6>
+                        </div>
+                        <p class="small text-white-50 mb-3">
+                            Instant push notification and banner alert to all active campus devices across all roles.
+                        </p>
+                        <a asp-controller="Admin" asp-action="Notifications" class="btn btn-sm btn-outline-light w-100">
+                            Broadcast Emergency Alert
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+}

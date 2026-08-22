@@ -1,0 +1,63 @@
+@model List<HawassaUnifiedCampusEventManagementSystem.Models._event>
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Calendar Management";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">📆 Campus Calendar & Conflict Monitor</h1>
+        <p class="text-muted small mb-0">Master overview of university schedules, venue reservations, and overlap prevention.</p>
+    </div>
+    <a asp-controller="Calendar" asp-action="Index" class="btn btn-outline-primary btn-sm" target="_blank">
+        <i class="bi bi-box-arrow-up-right me-1"></i>Open Public Calendar
+    </a>
+</div>
+
+<!-- =======================================================
+     SCHEDULE OVERVIEW LIST
+     ======================================================= -->
+<div class="admin-card overflow-hidden">
+    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+        <h2 class="h6 fw-bold text-dark mb-0"><i class="bi bi-calendar3 me-2 text-primary"></i>Scheduled Master Events</h2>
+        <span class="badge bg-primary-subtle text-primary border">@Model.Count Scheduled</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table admin-table" id="calendarTable">
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Event</th>
+                    <th>Venue</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ev in Model.OrderBy(e => e.start_at))
+                {
+                    <tr>
+                        <td class="font-monospace small">
+                            <strong class="d-block text-dark">@ev.start_at.ToString("MMM dd, yyyy")</strong>
+                            <span class="text-muted">@ev.start_at.ToString("hh:mm tt") - @ev.end_at.ToString("hh:mm tt")</span>
+                        </td>
+                        <td>
+                            <div class="fw-bold text-dark">@ev.title</div>
+                            <small class="text-muted">Mode: @ev.event_mode</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border"><i class="bi bi-geo-alt me-1 text-danger"></i>@(ev.venue?.name ?? "Main Campus Ground")</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary-subtle text-secondary">@(ev.category?.name ?? "General")</span>
+                        </td>
+                        <td>
+                            <span class="badge-status badge-approved">@ev.status</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

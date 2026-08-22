@@ -1,0 +1,201 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.JobPostingViewModel
+
+@{
+    ViewData["Title"] = $"{Model.Title} at {Model.CompanyName}";
+    var similarJobs = ViewBag.SimilarJobs as List<HawassaUnifiedCampusEventManagementSystem.Models.JobPostingViewModel> ?? new();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/jobs.css" asp-append-version="true" />
+}
+
+<div class="jobs-page">
+
+    <!-- DETAILS HERO -->
+    <section class="job-details-hero bg-white border-bottom py-5">
+        <div class="container">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Jobs" asp-action="Index">Jobs & Careers</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+                </ol>
+            </nav>
+
+            <div class="row align-items-center justify-content-between g-4">
+                <div class="col-lg-8">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="job-company-avatar" style="background: @Model.CompanyColor; width: 56px; height: 56px; font-size: 1.25rem;">
+                            @Model.CompanyInitials
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="fw-bold text-dark fs-5">@Model.CompanyName</span>
+                                @if (Model.IsVerifiedEmployer)
+                                {
+                                    <i class="bi bi-patch-check-fill text-primary" title="Verified Campus Partner"></i>
+                                }
+                            </div>
+                            <div class="text-muted small">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i> @Model.Location • <i class="bi bi-building me-1"></i> @Model.CampusLocation
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1 class="h2 fw-bold text-dark mb-3">@Model.Title</h1>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold">
+                            <i class="bi bi-clock me-1"></i> @Model.JobType
+                        </span>
+                        <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill fw-semibold">
+                            <i class="bi bi-laptop me-1"></i> @Model.WorkplaceType
+                        </span>
+                        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold">
+                            <i class="bi bi-cash-coin me-1"></i> @Model.SalaryDisplay
+                        </span>
+                        <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-semibold">
+                            <i class="bi bi-calendar-event me-1"></i> Deadline: @Model.DeadlineString
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 text-lg-end">
+                    <div class="d-flex flex-column flex-sm-row justify-content-lg-end gap-2">
+                        <a asp-controller="Jobs" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary btn-lg rounded-pill px-4 shadow">
+                            <i class="bi bi-send-fill me-1"></i> Apply for this Job
+                        </a>
+                        <a asp-controller="Jobs" asp-action="Index" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-1"></i> Browse Jobs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENT BODY -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <!-- MAIN CONTENT -->
+                <div class="col-lg-8">
+                    <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm mb-4">
+                        <h4 class="fw-bold text-dark mb-3">About the Role</h4>
+                        <div class="text-secondary leading-relaxed mb-4" style="white-space: pre-line;">
+                            @Model.Description
+                        </div>
+
+                        <h5 class="fw-bold text-dark mb-3 mt-4">Key Responsibilities</h5>
+                        <ul class="list-unstyled mb-4">
+                            @foreach (var resp in Model.Responsibilities)
+                            {
+                                <li class="d-flex align-items-start gap-2 mb-2 text-secondary">
+                                    <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                                    <span>@resp</span>
+                                </li>
+                            }
+                        </ul>
+
+                        <h5 class="fw-bold text-dark mb-3 mt-4">Requirements & Qualifications</h5>
+                        <ul class="list-unstyled mb-4">
+                            @foreach (var req in Model.Requirements)
+                            {
+                                <li class="d-flex align-items-start gap-2 mb-2 text-secondary">
+                                    <i class="bi bi-arrow-right-circle-fill text-primary mt-1"></i>
+                                    <span>@req</span>
+                                </li>
+                            }
+                        </ul>
+
+                        <h5 class="fw-bold text-dark mb-3 mt-4">Desired Skills</h5>
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            @foreach (var s in Model.Skills)
+                            {
+                                <span class="badge bg-light border text-dark fs-6 px-3 py-2 rounded-3">@s</span>
+                            }
+                        </div>
+
+                        <div class="p-4 bg-light rounded-4 border text-center mt-5">
+                            <h5 class="fw-bold text-dark mb-2">Ready to take the next step in your career?</h5>
+                            <p class="text-muted small mb-3">Submit your application today before the deadline on @Model.DeadlineString.</p>
+                            <a asp-controller="Jobs" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary btn-lg rounded-pill px-5 shadow">
+                                <i class="bi bi-send-fill me-1"></i> Apply Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIDEBAR -->
+                <div class="col-lg-4">
+                    <div class="job-details-sidebar mb-4">
+                        <h5 class="fw-bold text-dark mb-3">Job Summary</h5>
+                        <ul class="list-unstyled mb-4">
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted"><i class="bi bi-building me-2"></i>Employer</span>
+                                <strong class="text-dark">@Model.CompanyName</strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted"><i class="bi bi-geo-alt me-2"></i>Location</span>
+                                <strong class="text-dark">@Model.Location</strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted"><i class="bi bi-briefcase me-2"></i>Job Type</span>
+                                <strong class="text-dark">@Model.JobType</strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted"><i class="bi bi-laptop me-2"></i>Workplace</span>
+                                <strong class="text-dark">@Model.WorkplaceType</strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted"><i class="bi bi-cash me-2"></i>Salary / Pay</span>
+                                <strong class="text-success">@Model.SalaryDisplay</strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted"><i class="bi bi-calendar-check me-2"></i>Deadline</span>
+                                <strong class="text-danger">@Model.DeadlineString</strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2">
+                                <span class="text-muted"><i class="bi bi-people me-2"></i>Applicants</span>
+                                <strong class="text-dark">@Model.ApplicantCount applied</strong>
+                            </li>
+                        </ul>
+
+                        <a asp-controller="Jobs" asp-action="Apply" asp-route-id="@Model.Id" class="btn btn-primary w-100 py-2 rounded-pill shadow-sm mb-2">
+                            <i class="bi bi-send-fill me-1"></i> Apply Now
+                        </a>
+                    </div>
+
+                    <!-- SIMILAR JOBS -->
+                    @if (similarJobs.Any())
+                    {
+                        <div class="bg-white p-4 rounded-4 border shadow-sm">
+                            <h5 class="fw-bold text-dark mb-3">Similar Opportunities</h5>
+                            <div class="d-flex flex-column gap-3">
+                                @foreach (var sim in similarJobs)
+                                {
+                                    <div class="p-3 bg-light rounded-3 border">
+                                        <h6 class="fw-bold mb-1">
+                                            <a asp-controller="Jobs" asp-action="Details" asp-route-id="@sim.Id" class="text-decoration-none text-dark">
+                                                @sim.Title
+                                            </a>
+                                        </h6>
+                                        <div class="text-muted small mb-2">🏢 @sim.CompanyName • @sim.Location</div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary-subtle text-primary">@sim.JobType</span>
+                                            <a asp-controller="Jobs" asp-action="Details" asp-route-id="@sim.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                View
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</div>

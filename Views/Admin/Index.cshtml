@@ -1,0 +1,289 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminOverviewViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Dashboard Overview";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">🛡️ Admin Control Center</h1>
+        <p class="text-muted small mb-0">Central command and unified oversight for Hawassa University Campus Hub.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="Admin" asp-action="Reports" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1">
+            <i class="bi bi-graph-up"></i>
+            <span>View Analytics</span>
+        </a>
+        <a asp-controller="Admin" asp-action="Events" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm">
+            <i class="bi bi-calendar-check"></i>
+            <span>Review Pending (@Model.PendingApprovals)</span>
+        </a>
+    </div>
+</div>
+
+<!-- =======================================================
+     ROW 1: KEY PERFORMANCE STAT METRICS (4 CARDS)
+     ======================================================= -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-3 col-sm-6">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-primary-subtle text-primary">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div>
+                <div class="stat-num">@Model.TotalUsers.ToString("N0")</div>
+                <div class="stat-desc">Total Campus Users (@Model.ActiveUsers active)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-success-subtle text-success">
+                <i class="bi bi-calendar-event-fill"></i>
+            </div>
+            <div>
+                <div class="stat-num">@Model.TotalEvents.ToString("N0")</div>
+                <div class="stat-desc">Campus Events (@Model.UpcomingEvents upcoming)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-warning-subtle text-warning">
+                <i class="bi bi-building-fill"></i>
+            </div>
+            <div>
+                <div class="stat-num">@Model.TotalOrganizations.ToString("N0")</div>
+                <div class="stat-desc">Clubs & Organizations</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-info-subtle text-info">
+                <i class="bi bi-ticket-perforated-fill"></i>
+            </div>
+            <div>
+                <div class="stat-num">@Model.TotalRegistrations.ToString("N0")</div>
+                <div class="stat-desc">Event Registrations</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     ROW 2: CHARTS & EVENT CATEGORIES
+     ======================================================= -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="admin-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="h6 fw-bold text-dark mb-0"><i class="bi bi-graph-up text-primary me-2"></i>Campus Engagement & Registration Trends</h2>
+                    <small class="text-muted">Monthly attendee volume overview</small>
+                </div>
+                <span class="badge bg-primary-subtle text-primary border px-2 py-1">2026 Academic Year</span>
+            </div>
+            <div style="height: 280px;">
+                <canvas id="registrationTrendsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="admin-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="h6 fw-bold text-dark mb-0"><i class="bi bi-pie-chart text-success me-2"></i>Event Categories</h2>
+                    <small class="text-muted">Distribution by activity type</small>
+                </div>
+            </div>
+            <div style="height: 280px;">
+                <canvas id="categoryDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     ROW 3: PENDING APPROVALS & RECENT ACTIVITIES
+     ======================================================= -->
+<div class="row g-4 mb-4">
+    <!-- PENDING APPROVALS -->
+    <div class="col-lg-6">
+        <div class="admin-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="h6 fw-bold text-dark mb-0"><i class="bi bi-hourglass-split text-warning me-2"></i>Pending Event Approvals</h2>
+                    <small class="text-muted">Awaiting administrator verification</small>
+                </div>
+                <a asp-controller="Admin" asp-action="Events" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+
+            @if (Model.PendingEventsList.Any())
+            {
+                <div class="d-flex flex-column gap-2">
+                    @foreach (var item in Model.PendingEventsList)
+                    {
+                        <div class="p-3 border rounded-3 bg-light d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">@item.Title</h6>
+                                <div class="small text-muted">
+                                    <span class="badge bg-secondary-subtle text-secondary me-1">@item.Category</span>
+                                    <span><i class="bi bi-person me-1"></i>@item.Organizer</span> •
+                                    <span><i class="bi bi-calendar me-1"></i>@item.StartAt.ToString("MMM dd, yyyy")</span>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <form asp-controller="Admin" asp-action="EventApprove" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-success" title="Approve"><i class="bi bi-check-lg"></i></button>
+                                </form>
+                                <form asp-controller="Admin" asp-action="EventReject" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Reject"><i class="bi bi-x-lg"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-check-circle fs-2 text-success d-block mb-2"></i>
+                    <p class="mb-0 small">All event submissions have been reviewed and approved!</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- RECENT AUDIT ACTIVITIES -->
+    <div class="col-lg-6">
+        <div class="admin-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="h6 fw-bold text-dark mb-0"><i class="bi bi-activity text-info me-2"></i>Recent System Activity</h2>
+                    <small class="text-muted">Live audit trail snapshot</small>
+                </div>
+                <a asp-controller="Admin" asp-action="AuditLogs" class="btn btn-sm btn-outline-secondary">Full Audit</a>
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+                @foreach (var log in Model.RecentActivities)
+                {
+                    <div class="p-2 px-3 border rounded-2 d-flex align-items-center justify-content-between bg-white">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-primary-subtle text-primary font-monospace" style="font-size: 10px;">@log.Action</span>
+                            <span class="small text-dark text-truncate" style="max-width: 250px;">@log.Description</span>
+                        </div>
+                        <small class="text-muted" style="font-size: 11px;">@log.Timestamp.ToString("hh:mm tt")</small>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     ROW 4: RECENT REGISTERED USERS
+     ======================================================= -->
+<div class="admin-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h6 fw-bold text-dark mb-0"><i class="bi bi-person-plus text-primary me-2"></i>Recent Registered Campus Members</h2>
+            <small class="text-muted">Newly joined students, faculty, and organizers</small>
+        </div>
+        <a asp-controller="Admin" asp-action="Users" class="btn btn-sm btn-outline-primary">Manage Users</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table admin-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.RecentUsers)
+                {
+                    <tr>
+                        <td class="fw-semibold text-dark">@user.FullName</td>
+                        <td class="text-muted">@user.Email</td>
+                        <td><span class="badge bg-secondary-subtle text-secondary">@user.AccountType</span></td>
+                        <td><span class="badge-status badge-active">@user.Status</span></td>
+                        <td class="small text-muted">@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        <td class="text-end">
+                            <a asp-controller="Admin" asp-action="Users" asp-route-search="@user.Email" class="btn btn-sm btn-light border py-0 px-2">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Registration Trends Chart
+            const ctxTrends = document.getElementById('registrationTrendsChart');
+            if (ctxTrends) {
+                new Chart(ctxTrends, {
+                    type: 'line',
+                    data: {
+                        labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartMonths)),
+                        datasets: [{
+                            label: 'Monthly Registrations',
+                            data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartMonthlyRegistrations)),
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            }
+
+            // Categories Distribution Chart
+            const ctxCat = document.getElementById('categoryDistributionChart');
+            if (ctxCat) {
+                new Chart(ctxCat, {
+                    type: 'doughnut',
+                    data: {
+                        labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartCategories)),
+                        datasets: [{
+                            data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ChartCategoryCounts)),
+                            backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,176 @@
+@model IEnumerable<HawassaUnifiedCampusEventManagementSystem.Models.Event>
+
+@{
+    ViewData["Title"] = "My Events";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/events.css"
+          asp-append-version="true" />
+
+}
+
+<div class="events-page">
+
+    <div class="container">
+
+        <div class="events-header">
+
+            <div>
+
+                <span class="events-eyebrow">
+                    MY EVENTS
+                </span>
+
+                <h1>
+                    Events I Manage
+                </h1>
+
+                <p>
+                    Manage events created by you or your organization.
+                </p>
+
+            </div>
+
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Events"
+                   asp-action="Create"
+                   class="events-create-button">
+                    <i class="bi bi-plus-lg"></i>
+                    Create Event
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Account"
+                   asp-action="Register"
+                   asp-route-returnUrl="/Events/Create"
+                   class="events-create-button">
+                    <i class="bi bi-person-plus"></i>
+                    Register to Create Event
+                </a>
+            }
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="events-grid">
+
+                @foreach (var item in Model)
+                {
+                    <article class="event-card">
+
+                        <div class="event-date">
+
+                            <span>
+                                @item.EventDate.ToString("MMM")
+                            </span>
+
+                            <strong>
+                                @item.EventDate.Day
+                            </strong>
+
+                            <span>
+                                @item.EventDate.ToString("ddd")
+                            </span>
+
+                        </div>
+
+
+                        <div class="event-content">
+
+                            <span class="event-category">
+                                @item.Category
+                            </span>
+
+                            <h2>
+                                @item.Title
+                            </h2>
+
+                            <p class="event-description">
+
+                                @(!string.IsNullOrEmpty(item.Description) && item.Description.Length > 130
+                                    ? item.Description.Substring(0, 130) + "..."
+                                    : item.Description ?? string.Empty)
+
+                            </p>
+
+
+                            <div class="event-meta">
+
+                                <span>
+
+                                    <i class="bi bi-geo-alt"></i>
+
+                                    @item.Venue
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="event-card-footer">
+
+                                <a asp-controller="Events"
+                                   asp-action="Details"
+                                   asp-route-id="@item.Id">
+
+                                    Manage
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="events-empty">
+
+                <div class="events-empty-icon">
+
+                    <i class="bi bi-calendar-plus"></i>
+
+                </div>
+
+                <h2>
+                    You haven't created any events yet.
+                </h2>
+
+                <p>
+                    Create your first campus event.
+                </p>
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Events"
+                       asp-action="Create">
+                        Create Your First Event
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account"
+                       asp-action="Register"
+                       asp-route-returnUrl="/Events/Create">
+                        Register to Create Your First Event
+                    </a>
+                }
+            </div>
+        }
+
+    </div>
+
+</div>

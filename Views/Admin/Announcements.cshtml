@@ -1,0 +1,172 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminAnnouncementsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Announcement Management";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">📢 Announcement Management</h1>
+        <p class="text-muted small mb-0">Publish official campus notices, pin important updates, and archive old bulletins.</p>
+    </div>
+    <button type="button" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#newAnnouncementModal">
+        <i class="bi bi-plus-lg"></i>
+        <span>New Announcement</span>
+    </button>
+</div>
+
+<!-- =======================================================
+     METRICS
+     ======================================================= -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-primary-subtle text-primary"><i class="bi bi-megaphone"></i></div>
+            <div>
+                <div class="stat-num">@Model.TotalCount</div>
+                <div class="stat-desc">Total Announcements</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-warning-subtle text-warning"><i class="bi bi-pin-angle"></i></div>
+            <div>
+                <div class="stat-num">@Model.PinnedCount</div>
+                <div class="stat-desc">Pinned Bulletins</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-success-subtle text-success"><i class="bi bi-check2-circle"></i></div>
+            <div>
+                <div class="stat-num">@Model.PublishedCount</div>
+                <div class="stat-desc">Active / Published</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     ANNOUNCEMENTS LIST
+     ======================================================= -->
+<div class="admin-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table admin-table" id="announcementsTable">
+            <thead>
+                <tr>
+                    <th>Title & Content</th>
+                    <th>Author / Scope</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Date Published</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Announcements)
+                {
+                    <tr>
+                        <td style="max-width: 320px;">
+                            <div class="d-flex align-items-center gap-2">
+                                @if (item.IsPinned)
+                                {
+                                    <i class="bi bi-pin-angle-fill text-warning" title="Pinned Announcement"></i>
+                                }
+                                <div>
+                                    <div class="fw-bold text-dark">@item.Title</div>
+                                    <small class="text-muted text-truncate d-block" style="max-width: 300px;">@item.Content</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="small fw-semibold text-dark">@item.AuthorName</div>
+                            <small class="text-muted">@item.DepartmentName</small>
+                        </td>
+                        <td>
+                            @if (item.Priority == "URGENT" || item.Priority == "HIGH")
+                            {
+                                <span class="badge bg-danger-subtle text-danger">@item.Priority</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary-subtle text-secondary">@item.Priority</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge-status badge-published">@item.Status</span>
+                        </td>
+                        <td class="small text-muted">
+                            @item.CreatedAt.ToString("MMM dd, yyyy")
+                        </td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-1">
+                                <form asp-controller="Admin" asp-action="AnnouncementTogglePin" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-light border py-1 px-2" title="Toggle Pin">
+                                        <i class="bi bi-pin-angle"></i>
+                                    </button>
+                                </form>
+                                <form asp-controller="Admin" asp-action="AnnouncementDelete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Delete announcement?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-light border text-danger py-1 px-2" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- =======================================================
+     CREATE ANNOUNCEMENT MODAL
+     ======================================================= -->
+<div class="modal fade" id="newAnnouncementModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">📢 Publish Campus Announcement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-controller="Admin" asp-action="AnnouncementCreate" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Title</label>
+                        <input type="text" name="title" class="form-control form-control-sm" required placeholder="e.g. Campus Wi-Fi Maintenance Window" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Announcement Content</label>
+                        <textarea name="content" rows="4" class="form-control form-control-sm" required placeholder="Details about this official announcement..."></textarea>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Priority</label>
+                            <select name="priority" class="form-select form-select-sm">
+                                <option value="NORMAL">Normal</option>
+                                <option value="HIGH">High</option>
+                                <option value="URGENT">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="col-6 d-flex align-items-center pt-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="isPinned" value="true" class="form-check-input" id="isPinnedCheck" />
+                                <label class="form-check-label small fw-semibold" for="isPinnedCheck">Pin to Top</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-primary px-3">Publish Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

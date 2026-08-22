@@ -1,0 +1,156 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.ContactViewModel
+
+@{
+    ViewData["Title"] = "Contact Campus Administration";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- PAGE HEADER -->
+            <div class="text-center mb-5">
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold mb-2">
+                    <i class="bi bi-headset me-1"></i> SUPPORT & INQUIRIES
+                </span>
+                <h1 class="display-6 fw-bold text-dark">Contact Campus Administration</h1>
+                <p class="text-muted lead fs-6">Have questions regarding campus events, venue reservations, student organizations, or system access? Reach out to our campus coordinators.</p>
+            </div>
+
+            <!-- SUCCESS MESSAGE ALERT -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4 rounded-3 p-3" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+                        <div>
+                            <strong>Inquiry Dispatched!</strong>
+                            <p class="mb-0 small">@TempData["SuccessMessage"]</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="row g-4">
+                <!-- CAMPUS INFORMATION CARDS -->
+                <div class="col-md-5">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-4 bg-light">
+                        <h2 class="h5 fw-bold mb-4 text-dark"><i class="bi bi-geo-alt-fill text-primary me-2"></i>Campus Locations</h2>
+
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="bg-white p-3 rounded-3 shadow-sm text-primary fs-4 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <div>
+                                <h3 class="h6 fw-bold mb-1 text-dark">Main Campus</h3>
+                                <p class="small text-muted mb-0">Hawassa University Main Admin Complex, Student Affairs Directorate, Hawassa, Ethiopia</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="bg-white p-3 rounded-3 shadow-sm text-success fs-4 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="bi bi-cpu"></i>
+                            </div>
+                            <div>
+                                <h3 class="h6 fw-bold mb-1 text-dark">IoT Campus</h3>
+                                <p class="small text-muted mb-0">Institute of Technology (IoT), College of Informatics, ICT Server Operations Room</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="bg-white p-3 rounded-3 shadow-sm text-danger fs-4 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="bi bi-envelope-at"></i>
+                            </div>
+                            <div>
+                                <h3 class="h6 fw-bold mb-1 text-dark">Email Dispatch</h3>
+                                <p class="small text-muted mb-0">events@hawassauniversity.edu.et<br />ict-support@hu.edu.et</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3">
+                            <div class="bg-white p-3 rounded-3 shadow-sm text-warning fs-4 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div>
+                                <h3 class="h6 fw-bold mb-1 text-dark">Helpdesk Hotline</h3>
+                                <p class="small text-muted mb-0">+251 (46) 220-4528 / +251 (46) 220-6677<br /><span class="text-success fw-semibold">Mon - Fri: 8:30 AM - 5:30 PM EAT</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTACT INQUIRY FORM -->
+                <div class="col-md-7">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                        <h2 class="h5 fw-bold mb-3 text-dark"><i class="bi bi-send-fill text-primary me-2"></i>Send an Inquiry</h2>
+
+                        <form asp-controller="Home" asp-action="Contact" method="post" novalidate>
+                            @Html.AntiForgeryToken()
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                            <div class="mb-3">
+                                <label asp-for="FullName" class="form-label fw-semibold small text-dark"></label> <span class="text-danger">*</span>
+                                <input asp-for="FullName" class="form-control form-control-lg fs-6" placeholder="e.g. Abebe Bekele" />
+                                <span asp-validation-for="FullName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-sm-6">
+                                    <label asp-for="Email" class="form-label fw-semibold small text-dark"></label> <span class="text-danger">*</span>
+                                    <input asp-for="Email" class="form-control form-control-lg fs-6" placeholder="name@hu.edu.et" />
+                                    <span asp-validation-for="Email" class="text-danger small"></span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label asp-for="Phone" class="form-label fw-semibold small text-dark"></label>
+                                    <input asp-for="Phone" class="form-control form-control-lg fs-6" placeholder="+251 91 234 5678" />
+                                    <span asp-validation-for="Phone" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-sm-6">
+                                    <label asp-for="Subject" class="form-label fw-semibold small text-dark"></label> <span class="text-danger">*</span>
+                                    <select asp-for="Subject" class="form-select form-control-lg fs-6">
+                                        <option value="Event Organization & Approval">Event Organization & Approval</option>
+                                        <option value="Venue & Equipment Booking">Venue & Equipment Booking</option>
+                                        <option value="Student Account / Portal Access">Student Account / Portal Access</option>
+                                        <option value="Career & Job Posting Verification">Career & Job Posting</option>
+                                        <option value="General Campus Question">General Campus Question</option>
+                                    </select>
+                                    <span asp-validation-for="Subject" class="text-danger small"></span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label asp-for="Department" class="form-label fw-semibold small text-dark"></label>
+                                    <select asp-for="Department" class="form-select form-control-lg fs-6">
+                                        <option value="Main Campus">Main Campus</option>
+                                        <option value="IoT Campus">IoT Campus (Informatics)</option>
+                                        <option value="College of Health Sciences">College of Health Sciences</option>
+                                        <option value="College of Agriculture">College of Agriculture</option>
+                                        <option value="College of Business & Economics">College of Business & Economics</option>
+                                    </select>
+                                    <span asp-validation-for="Department" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="Message" class="form-label fw-semibold small text-dark"></label> <span class="text-danger">*</span>
+                                <textarea asp-for="Message" class="form-control" rows="4" placeholder="Please describe your inquiry or issue in detail..."></textarea>
+                                <span asp-validation-for="Message" class="text-danger small"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm fw-semibold">
+                                <i class="bi bi-send me-2"></i>Submit Inquiry
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

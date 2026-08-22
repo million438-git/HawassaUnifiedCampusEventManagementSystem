@@ -1,0 +1,326 @@
+@model IEnumerable<HawassaUnifiedCampusEventManagementSystem.Models.Event>
+
+@{
+    ViewData["Title"] = "Events";
+}
+
+@section Styles {
+
+    <link rel="stylesheet"
+          href="~/css/events.css"
+          asp-append-version="true" />
+
+}
+
+<div class="events-page">
+
+    <div class="container">
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <div class="events-header">
+
+            <div>
+
+                <span class="events-eyebrow">
+                    HUCEMS EVENTS
+                </span>
+
+                <h1>
+                    Discover Campus Events
+                </h1>
+
+                <p>
+                    Find events, workshops, seminars, activities,
+                    clubs and opportunities happening across campus.
+                </p>
+
+            </div>
+
+
+            <div>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Events"
+                       asp-action="Create"
+                       class="events-create-button">
+                        <i class="bi bi-plus-lg"></i>
+                        Create Event
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account"
+                       asp-action="Register"
+                       asp-route-returnUrl="/Events/Create"
+                       class="events-create-button">
+                        <i class="bi bi-person-plus"></i>
+                        Register to Create Event
+                    </a>
+                }
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SUCCESS MESSAGE
+             ===================================================== -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="events-alert">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+                <span>
+                    @TempData["SuccessMessage"]
+                </span>
+
+            </div>
+        }
+
+
+        <!-- =====================================================
+             SEARCH / FILTER
+             ===================================================== -->
+
+        <form asp-controller="Events"
+              asp-action="Index"
+              method="get"
+              class="events-filter">
+
+            <div class="events-search">
+
+                <i class="bi bi-search"></i>
+
+                <input type="search"
+                       name="search"
+                       value="@ViewBag.Search"
+                       placeholder="Search events..." />
+
+            </div>
+
+
+            <select name="category"
+                    class="events-category-select">
+
+                <option value="">
+                    All Categories
+                </option>
+
+                <option value="Technology">
+                    Technology
+                </option>
+
+                <option value="Business">
+                    Business
+                </option>
+
+                <option value="Culture">
+                    Culture
+                </option>
+
+                <option value="Cybersecurity">
+                    Cybersecurity
+                </option>
+
+                <option value="Sports">
+                    Sports
+                </option>
+
+                <option value="Academic">
+                    Academic
+                </option>
+
+                <option value="Social">
+                    Social
+                </option>
+
+            </select>
+
+
+            <button type="submit"
+                    class="events-filter-button">
+
+                <i class="bi bi-funnel"></i>
+
+                Filter
+
+            </button>
+
+
+            <a asp-controller="Events"
+               asp-action="Index"
+               class="events-clear-button">
+
+                Clear
+
+            </a>
+
+        </form>
+
+
+        <!-- =====================================================
+             EVENT COUNT
+             ===================================================== -->
+
+        <div class="events-result-header">
+
+            <strong>
+                @Model.Count() Events
+            </strong>
+
+            <span>
+                Upcoming campus activities
+            </span>
+
+        </div>
+
+
+        <!-- =====================================================
+             EVENTS
+             ===================================================== -->
+        @if (Model.Any())
+        {
+            <div class="events-grid">
+
+                @foreach (var item in Model)
+                {
+                    <article class="event-card">
+
+
+                        <!-- EVENT DATE -->
+
+                        <div class="event-date">
+
+                            <span class="event-month">
+                                @item.EventDate.ToString("MMM")
+                            </span>
+
+                            <strong>
+                                @item.EventDate.Day
+                            </strong>
+
+                            <span>
+                                @item.EventDate.ToString("ddd")
+                            </span>
+
+                        </div>
+
+
+                        <!-- EVENT CONTENT -->
+
+                        <div class="event-content">
+
+                            <div class="event-card-top">
+
+                                <span class="event-category">
+
+                                    @item.Category
+
+                                </span>
+
+                            </div>
+
+
+                            <h2>
+
+                                @item.Title
+
+                            </h2>
+
+
+                            <p class="event-description">
+
+                                @(!string.IsNullOrEmpty(item.Description) && item.Description.Length > 150
+                                    ? item.Description.Substring(0, 150) + "..."
+                                    : item.Description ?? string.Empty)
+
+                            </p>
+
+
+                            <div class="event-meta">
+
+                                <span>
+
+                                    <i class="bi bi-clock"></i>
+
+                                    @item.StartTime.ToString(@"hh\:mm")
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="bi bi-geo-alt"></i>
+
+                                    @item.Venue
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="event-card-footer">
+
+                                <span>
+
+                                    <i class="bi bi-person"></i>
+
+                                    @item.Organizer
+
+                                </span>
+
+
+                                <a asp-controller="Events"
+                                   asp-action="Details"
+                                   asp-route-id="@item.Id">
+
+                                    View Details
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="events-empty">
+
+                <div class="events-empty-icon">
+
+                    <i class="bi bi-calendar-x"></i>
+
+                </div>
+
+                <h2>
+                    No events found
+                </h2>
+
+                <p>
+                    Try another search or category.
+                </p>
+
+                <a asp-controller="Events"
+                   asp-action="Index">
+
+                    Show All Events
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

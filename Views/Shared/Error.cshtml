@@ -1,0 +1,45 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error - HUCEMS";
+    var statusCode = ViewBag.StatusCode as int?;
+    var title = statusCode switch
+    {
+        404 => "404 - Page Not Found",
+        403 => "403 - Access Forbidden",
+        500 => "500 - Internal Server Error",
+        _ => "An Error Occurred"
+    };
+    var message = statusCode switch
+    {
+        404 => "The campus page, event, or resource you are looking for does not exist or has been moved.",
+        403 => "You do not have administrative permission to view or manage this resource.",
+        500 => "An unexpected error occurred on the university servers. Our team has been notified.",
+        _ => "We encountered an unexpected issue while processing your campus request."
+    };
+}
+
+<div class="container py-5 text-center" style="max-width: 650px; min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div class="mb-4">
+        <div class="d-inline-flex p-4 rounded-circle bg-danger-subtle text-danger mb-3">
+            <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem;"></i>
+        </div>
+        <h1 class="fw-bold text-dark mb-2">@title</h1>
+        <p class="text-muted fs-5">@message</p>
+    </div>
+
+    @if (Model.ShowRequestId)
+    {
+        <div class="p-2 px-3 bg-light border rounded-pill mb-4">
+            <small class="text-muted">Trace ID: <code>@Model.RequestId</code></small>
+        </div>
+    }
+
+    <div class="d-flex gap-3 justify-content-center">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary px-4 py-2 fw-semibold">
+            <i class="bi bi-house-door me-1"></i> Return Home
+        </a>
+        <a asp-controller="Events" asp-action="Index" class="btn btn-outline-secondary px-4 py-2">
+            <i class="bi bi-calendar-event me-1"></i> Browse Events
+        </a>
+    </div>
+</div>

@@ -1,0 +1,185 @@
+@{
+    ViewData["Title"] = "Create Account | HUCEMS";
+}
+
+<link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
+
+<div class="register-page">
+
+    <div class="register-card shadow-lg">
+
+        <div class="register-icon">🎓</div>
+
+        <h1>Join HUCEMS</h1>
+
+        <p class="register-description">
+            Create your Hawassa University campus account & access your personalized role dashboard.
+        </p>
+
+        @if (ViewBag.ReturnUrl != null && ((string)ViewBag.ReturnUrl).Contains("Create", StringComparison.OrdinalIgnoreCase))
+        {
+            <div class="alert alert-info py-2 px-3 mb-3 small rounded-3" style="background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
+                <i class="bi bi-info-circle-fill me-1"></i>
+                Create an account first to publish and host campus events!
+            </div>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error-message">
+                @ViewBag.Error
+            </div>
+        }
+
+        <form asp-controller="Account"
+              asp-action="Register"
+              method="post"
+              id="registerForm">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+            <!-- ACCOUNT ROLE SELECTOR -->
+            <div class="form-group mb-3">
+                <label class="fw-bold mb-2">Select Your Role / Account Type</label>
+                <div class="role-selector-grid">
+                    <label class="role-option-card active" for="role_student">
+                        <input type="radio" name="accountType" id="role_student" value="Student" checked onchange="toggleRoleFields('Student')" />
+                        <div class="role-option-content">
+                            <span class="role-icon">🎓</span>
+                            <strong>Student</strong>
+                            <small>Events & Clubs</small>
+                        </div>
+                    </label>
+
+                    <label class="role-option-card" for="role_staff">
+                        <input type="radio" name="accountType" id="role_staff" value="Staff" onchange="toggleRoleFields('Staff')" />
+                        <div class="role-option-content">
+                            <span class="role-icon">💼</span>
+                            <strong>Staff</strong>
+                            <small>Operations</small>
+                        </div>
+                    </label>
+
+                    <label class="role-option-card" for="role_faculty">
+                        <input type="radio" name="accountType" id="role_faculty" value="Faculty" onchange="toggleRoleFields('Faculty')" />
+                        <div class="role-option-content">
+                            <span class="role-icon">📚</span>
+                            <strong>Faculty</strong>
+                            <small>Academic Hub</small>
+                        </div>
+                    </label>
+
+                    <label class="role-option-card" for="role_org">
+                        <input type="radio" name="accountType" id="role_org" value="Organization" onchange="toggleRoleFields('Organization')" />
+                        <div class="role-option-content">
+                            <span class="role-icon">🌟</span>
+                            <strong>Organization</strong>
+                            <small>Host & Sponsor</small>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text"
+                       name="fullName"
+                       id="fullName"
+                       placeholder="e.g. Dawit Yohannes"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="email">Campus Email Address</label>
+                <input type="email"
+                       name="email"
+                       id="email"
+                       placeholder="name@hawassauniversity.edu.et"
+                       required />
+            </div>
+
+            <!-- DYNAMIC ROLE-SPECIFIC FIELDS -->
+            <div class="form-group" id="studentIdGroup">
+                <label for="studentId">Student ID Number</label>
+                <input type="text"
+                       name="studentId"
+                       id="studentId"
+                       placeholder="e.g. HU/45821/15" />
+            </div>
+
+            <div class="form-group d-none" id="employeeIdGroup">
+                <label for="employeeId">Employee / Staff ID</label>
+                <input type="text"
+                       name="employeeId"
+                       id="employeeId"
+                       placeholder="e.g. EMP-HU-2041" />
+            </div>
+
+            <div class="form-group d-none" id="orgNameGroup">
+                <label for="organizationName">Club / Organization Name</label>
+                <input type="text"
+                       name="organizationName"
+                       id="organizationName"
+                       placeholder="e.g. Hawassa Tech Society" />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password"
+                       name="password"
+                       id="password"
+                       placeholder="Create a strong password (min 6 characters)"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password"
+                       name="confirmPassword"
+                       id="confirmPassword"
+                       placeholder="Confirm your password"
+                       required />
+                <span id="passwordError"></span>
+            </div>
+
+            <button type="submit"
+                    class="register-button"
+                    id="registerButton">
+                Create Account & Launch Dashboard 🚀
+            </button>
+
+        </form>
+
+        <div class="register-footer">
+            Already have an account?
+            <a asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl">
+                Sign In
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="~/js/register.js" asp-append-version="true"></script>
+<script>
+    function toggleRoleFields(role) {
+        document.querySelectorAll('.role-option-card').forEach(el => el.classList.remove('active'));
+        if (event && event.currentTarget) {
+            event.currentTarget.closest('.role-option-card')?.classList.add('active');
+        }
+
+        const studentGrp = document.getElementById('studentIdGroup');
+        const empGrp = document.getElementById('employeeIdGroup');
+        const orgGrp = document.getElementById('orgNameGroup');
+
+        if (studentGrp) studentGrp.classList.add('d-none');
+        if (empGrp) empGrp.classList.add('d-none');
+        if (orgGrp) orgGrp.classList.add('d-none');
+
+        if (role === 'Student' && studentGrp) studentGrp.classList.remove('d-none');
+        else if ((role === 'Staff' || role === 'Faculty') && empGrp) empGrp.classList.remove('d-none');
+        else if (role === 'Organization' && orgGrp) orgGrp.classList.remove('d-none');
+    }
+</script>

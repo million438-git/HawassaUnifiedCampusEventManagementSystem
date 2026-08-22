@@ -1,0 +1,561 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<link rel="stylesheet"
+      href="~/css/home.css"
+      asp-append-version="true" />
+
+<!-- =========================================
+     HERO
+     ========================================= -->
+
+<section class="hero-section">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content reveal">
+
+        <div class="hero-badge">
+            🎓 HAWASSA UNIVERSITY
+        </div>
+
+        <h1>
+            Connect.
+            <span>Discover.</span>
+            Participate.
+        </h1>
+
+        <p>
+            Welcome to HUCEMS — the unified campus event
+            management platform for discovering events,
+            connecting with your university community,
+            and participating in campus activities.
+        </p>
+
+        <div class="hero-actions">
+
+            <a asp-controller="Events"
+               asp-action="Index"
+               class="hero-btn primary">
+                Explore Events
+                <span>→</span>
+            </a>
+
+            <a asp-controller="Account"
+               asp-action="Register"
+               class="hero-btn secondary">
+                Join HUCEMS
+            </a>
+
+        </div>
+
+        <div class="hero-info">
+
+            <div>
+                <strong>100+</strong>
+                <span>Events</span>
+            </div>
+
+            <div>
+                <strong>500+</strong>
+                <span>Students</span>
+            </div>
+
+            <div>
+                <strong>30+</strong>
+                <span>Organizations</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="scroll-indicator">
+
+        <span>Scroll to explore</span>
+
+        <div class="scroll-arrow">
+            ↓
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     INTRODUCTION
+     ========================================= -->
+
+<section class="intro-section reveal">
+
+    <div class="section-container">
+
+        <div class="intro-text">
+
+            <span class="section-label">
+                CAMPUS LIFE
+            </span>
+
+            <h2>
+                One Platform.
+                <span>One Campus Community.</span>
+            </h2>
+
+            <p>
+                HUCEMS brings campus events, organizations,
+                announcements and community activities together
+                in one modern platform.
+            </p>
+
+            <a asp-controller="Events"
+               asp-action="Index"
+               class="text-link">
+                Discover what's happening →
+            </a>
+
+        </div>
+
+        <div class="intro-cards">
+
+            <div class="mini-card">
+
+                <div class="mini-icon">
+                    📅
+                </div>
+
+                <h3>
+                    Events
+                </h3>
+
+                <p>
+                    Discover upcoming campus activities.
+                </p>
+
+            </div>
+
+            <div class="mini-card">
+
+                <div class="mini-icon">
+                    👥
+                </div>
+
+                <h3>
+                    Community
+                </h3>
+
+                <p>
+                    Connect with your campus community.
+                </p>
+
+            </div>
+
+            <div class="mini-card">
+
+                <div class="mini-icon">
+                    📢
+                </div>
+
+                <h3>
+                    Updates
+                </h3>
+
+                <p>
+                    Stay informed about campus news.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     EVENT CELEBRATION BACKGROUND
+     ========================================= -->
+
+<section class="event-celebration">
+
+    <div class="celebration-overlay"></div>
+
+    <div class="celebration-content reveal">
+
+        <span class="section-label light">
+            EXPERIENCE CAMPUS LIFE
+        </span>
+
+        <h2>
+            Every Event Creates
+            <span>A Memory.</span>
+        </h2>
+
+        <p>
+            From academic conferences and workshops
+            to cultural celebrations, sports and student
+            activities — discover what makes campus life special.
+        </p>
+
+        <a asp-controller="Events"
+           asp-action="Index"
+           class="celebration-button">
+            Explore Campus Events
+            <span>→</span>
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     FEATURE SECTION
+     ========================================= -->
+
+<section class="features-section">
+
+    <div class="section-container">
+
+        <div class="section-title reveal">
+
+            <span class="section-label">
+                HUCEMS FEATURES
+            </span>
+
+            <h2>
+                Everything You Need
+            </h2>
+
+            <p>
+                A complete digital platform for your campus activities.
+            </p>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+            <a asp-controller="Events"
+               asp-action="Index"
+               class="feature-card reveal">
+
+                <div class="feature-icon">
+                    📅
+                </div>
+
+                <h3>
+                    Event Management
+                </h3>
+
+                <p>
+                    Discover, create and manage university events
+                    from one place.
+                </p>
+
+                <span>
+                    Explore Events →
+                </span>
+
+            </a>
+
+
+            <a asp-controller="Calendar"
+               asp-action="Index"
+               class="feature-card reveal">
+
+                <div class="feature-icon">
+                    🗓️
+                </div>
+
+                <h3>
+                    Campus Calendar
+                </h3>
+
+                <p>
+                    View upcoming activities and important
+                    campus dates.
+                </p>
+
+                <span>
+                    Open Calendar →
+                </span>
+
+            </a>
+
+
+            <a asp-controller="Community"
+               asp-action="Index"
+               class="feature-card reveal">
+
+                <div class="feature-icon">
+                    👥
+                </div>
+
+                <h3>
+                    Campus Community
+                </h3>
+
+                <p>
+                    Connect with students, organizations
+                    and campus groups.
+                </p>
+
+                <span>
+                    Visit Community →
+                </span>
+
+            </a>
+
+
+            <a asp-controller="Announcements"
+               asp-action="Index"
+               class="feature-card reveal">
+
+                <div class="feature-icon">
+                    📢
+                </div>
+
+                <h3>
+                    Announcements
+                </h3>
+
+                <p>
+                    Receive important university announcements
+                    and updates.
+                </p>
+
+                <span>
+                    View Announcements →
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     STATISTICS
+     ========================================= -->
+
+<section class="statistics-section">
+
+    <div class="statistics-container">
+
+        <div class="stat reveal">
+
+            <div class="stat-number"
+                 data-target="100">
+                0
+            </div>
+
+            <div class="stat-label">
+                Campus Events
+            </div>
+
+        </div>
+
+
+        <div class="stat reveal">
+
+            <div class="stat-number"
+                 data-target="500">
+                0
+            </div>
+
+            <div class="stat-label">
+                Students
+            </div>
+
+        </div>
+
+
+        <div class="stat reveal">
+
+            <div class="stat-number"
+                 data-target="30">
+                0
+            </div>
+
+            <div class="stat-label">
+                Organizations
+            </div>
+
+        </div>
+
+
+        <div class="stat reveal">
+
+            <div class="stat-number"
+                 data-target="20">
+                0
+            </div>
+
+            <div class="stat-label">
+                Departments
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     HOW IT WORKS
+     ========================================= -->
+
+<section class="process-section">
+
+    <div class="section-container">
+
+        <div class="section-title reveal">
+
+            <span class="section-label">
+                SIMPLE & EASY
+            </span>
+
+            <h2>
+                How HUCEMS Works
+            </h2>
+
+        </div>
+
+
+        <div class="process-grid">
+
+            <div class="process-card reveal">
+
+                <div class="process-number">
+                    01
+                </div>
+
+                <h3>
+                    Create an Account
+                </h3>
+
+                <p>
+                    Register and create your campus profile.
+                </p>
+
+            </div>
+
+
+            <div class="process-card reveal">
+
+                <div class="process-number">
+                    02
+                </div>
+
+                <h3>
+                    Discover Events
+                </h3>
+
+                <p>
+                    Find events and activities that interest you.
+                </p>
+
+            </div>
+
+
+            <div class="process-card reveal">
+
+                <div class="process-number">
+                    03
+                </div>
+
+                <h3>
+                    Participate
+                </h3>
+
+                <p>
+                    Register for events and participate in campus life.
+                </p>
+
+            </div>
+
+
+            <div class="process-card reveal">
+
+                <div class="process-number">
+                    04
+                </div>
+
+                <h3>
+                    Stay Connected
+                </h3>
+
+                <p>
+                    Follow updates and stay connected with your community.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     FINAL CTA
+     ========================================= -->
+
+<section class="final-cta reveal">
+
+    <div class="final-cta-content">
+
+        <span class="section-label light">
+            JOIN THE COMMUNITY
+        </span>
+
+        <h2>
+            Your Campus.
+            Your Events.
+            Your Community.
+        </h2>
+
+        <p>
+            Start discovering the activities happening
+            around Hawassa University today.
+        </p>
+
+        <div class="cta-buttons">
+
+            <a asp-controller="Account"
+               asp-action="Register"
+               class="hero-btn primary">
+                Create Account
+            </a>
+
+            <a asp-controller="Events"
+               asp-action="Index"
+               class="hero-btn secondary">
+                Browse Events
+            </a>
+
+        </div>
+
+        <p class="small mt-3">
+            <a asp-controller="Home"
+               asp-action="Privacy"
+               class="text-link">
+                Privacy Policy
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+
+<script src="~/js/home.js"
+        asp-append-version="true"></script>

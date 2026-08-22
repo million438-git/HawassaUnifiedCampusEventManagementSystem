@@ -1,0 +1,160 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminRegistrationsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Registration Management";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">🎟️ Registration & Attendee Management</h1>
+        <p class="text-muted small mb-0">Track attendee enrollments, verify ticket codes, confirm bookings, and export attendee rosters.</p>
+    </div>
+    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="exportTableToCSV('registrationsTable', 'hawassa_event_registrations.csv')">
+        <i class="bi bi-download me-1"></i>Export CSV
+    </button>
+</div>
+
+<!-- =======================================================
+     METRICS
+     ======================================================= -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-primary-subtle text-primary"><i class="bi bi-ticket-perforated"></i></div>
+            <div>
+                <div class="stat-num">@Model.TotalCount</div>
+                <div class="stat-desc">Total Registrations</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-success-subtle text-success"><i class="bi bi-check-circle"></i></div>
+            <div>
+                <div class="stat-num">@Model.ConfirmedCount</div>
+                <div class="stat-desc">Confirmed Bookings</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-warning-subtle text-warning"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+                <div class="stat-num">@Model.WaitlistedCount</div>
+                <div class="stat-desc">Waitlisted</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="admin-stat-card">
+            <div class="stat-icon-box bg-danger-subtle text-danger"><i class="bi bi-x-circle"></i></div>
+            <div>
+                <div class="stat-num">@Model.CancelledCount</div>
+                <div class="stat-desc">Cancelled</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     FILTERS
+     ======================================================= -->
+<div class="admin-card p-3 mb-4">
+    <form method="get" class="row g-2 align-items-center">
+        <div class="col-md-7">
+            <select name="eventId" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="">All Events</option>
+                @foreach (var ev in Model.Events)
+                {
+                    <option value="@ev.id" selected="@(Model.SelectedEventId == ev.id)">@ev.title (@ev.start_at.ToString("MMM dd, yyyy"))</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="ALL" selected="@(Model.StatusFilter == null || Model.StatusFilter == "ALL")">All Statuses</option>
+                <option value="CONFIRMED" selected="@(Model.StatusFilter == "CONFIRMED")">Confirmed</option>
+                <option value="WAITLISTED" selected="@(Model.StatusFilter == "WAITLISTED")">Waitlisted</option>
+                <option value="CANCELLED" selected="@(Model.StatusFilter == "CANCELLED")">Cancelled</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <a asp-controller="Admin" asp-action="Registrations" class="btn btn-sm btn-light border w-100" title="Reset"><i class="bi bi-arrow-counterclockwise"></i></a>
+        </div>
+    </form>
+</div>
+
+<!-- =======================================================
+     REGISTRATIONS TABLE
+     ======================================================= -->
+<div class="admin-card overflow-hidden">
+    <div class="table-responsive">
+        <table class="table admin-table" id="registrationsTable">
+            <thead>
+                <tr>
+                    <th>Attendee Name</th>
+                    <th>Email Contact</th>
+                    <th>Event</th>
+                    <th>Ticket Code</th>
+                    <th>Status</th>
+                    <th>Registered At</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reg in Model.Registrations)
+                {
+                    <tr>
+                        <td class="fw-semibold text-dark">@reg.AttendeeName</td>
+                        <td class="text-muted">@reg.AttendeeEmail</td>
+                        <td>
+                            <div class="fw-bold text-dark small">@reg.EventTitle</div>
+                            <small class="text-muted">ID: #@reg.EventId</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary-subtle text-secondary font-monospace">@(reg.TicketCode ?? "HU-TKT-Auto")</span>
+                        </td>
+                        <td>
+                            @if (reg.Status == "CONFIRMED")
+                            {
+                                <span class="badge-status badge-confirmed">Confirmed</span>
+                            }
+                            else if (reg.Status == "WAITLISTED")
+                            {
+                                <span class="badge-status badge-waitlisted">Waitlisted</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-cancelled">@reg.Status</span>
+                            }
+                        </td>
+                        <td class="small text-muted">@reg.RegisteredAt.ToString("MMM dd, yyyy hh:mm tt")</td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-1">
+                                @if (reg.Status != "CONFIRMED")
+                                {
+                                    <form asp-controller="Admin" asp-action="RegistrationConfirm" asp-route-id="@reg.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-success py-1 px-2" title="Confirm Booking">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </form>
+                                }
+                                @if (reg.Status != "CANCELLED")
+                                {
+                                    <form asp-controller="Admin" asp-action="RegistrationCancel" asp-route-id="@reg.Id" method="post" class="d-inline" onsubmit="return confirm('Cancel this registration?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-light border text-danger py-1 px-2" title="Cancel Booking">
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

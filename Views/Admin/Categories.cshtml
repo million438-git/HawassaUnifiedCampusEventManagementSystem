@@ -1,0 +1,130 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminCategoriesTagsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Categories & Tags";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">🏷️ Event Categories & Tags</h1>
+        <p class="text-muted small mb-0">Manage event classification taxonomies, color badges, and search discovery tags.</p>
+    </div>
+    <button type="button" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#newCategoryModal">
+        <i class="bi bi-plus-lg"></i>
+        <span>New Category</span>
+    </button>
+</div>
+
+<div class="row g-4">
+    <!-- CATEGORIES -->
+    <div class="col-lg-8">
+        <div class="admin-card p-4">
+            <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-grid me-2 text-primary"></i>Event Categories</h2>
+            <div class="table-responsive">
+                <table class="table admin-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Slug</th>
+                            <th>Description</th>
+                            <th>Events</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge bg-primary-subtle text-primary border">
+                                        <i class="bi @(cat.icon ?? "bi-calendar-event") me-1"></i>@cat.name
+                                    </span>
+                                </td>
+                                <td><code class="text-muted">@cat.slug</code></td>
+                                <td class="small text-muted">@(cat.description ?? "General category")</td>
+                                <td><span class="badge bg-light text-dark border">@cat._events.Count Events</span></td>
+                                <td class="text-end">
+                                    <form asp-controller="Admin" asp-action="CategoryDelete" asp-route-id="@cat.id" method="post" class="d-inline" onsubmit="return confirm('Delete category?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-light border text-danger py-1 px-2">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="col-lg-4">
+        <div class="admin-card p-4">
+            <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-tags me-2 text-success"></i>Search Discovery Tags</h2>
+            <div class="d-flex flex-wrap gap-2">
+                @foreach (var tag in Model.Tags)
+                {
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">
+                        #@tag.name
+                    </span>
+                }
+                @if (!Model.Tags.Any())
+                {
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">#AI</span>
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">#Cybersecurity</span>
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">#Programming</span>
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">#Football</span>
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">#Research</span>
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">#Business</span>
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">#Health</span>
+                    <span class="badge bg-secondary-subtle text-secondary border px-3 py-2">#Music</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =======================================================
+     ADD CATEGORY MODAL
+     ======================================================= -->
+<div class="modal fade" id="newCategoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">🏷️ Add Event Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-controller="Admin" asp-action="CategoryCreate" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Category Name</label>
+                        <input type="text" name="name" class="form-control form-control-sm" required placeholder="e.g. Science & Innovation" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Description</label>
+                        <textarea name="description" rows="2" class="form-control form-control-sm" placeholder="Description of this event type..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Icon Style</label>
+                        <select name="icon" class="form-select form-select-sm">
+                            <option value="bi-calendar-event">Calendar</option>
+                            <option value="bi-laptop">Technology / Laptop</option>
+                            <option value="bi-trophy">Sports / Trophy</option>
+                            <option value="bi-palette">Culture / Art</option>
+                            <option value="bi-briefcase">Career / Business</option>
+                            <option value="bi-book">Academic / Book</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-primary px-3">Create Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

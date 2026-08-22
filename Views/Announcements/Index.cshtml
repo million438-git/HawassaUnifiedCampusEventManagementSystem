@@ -1,0 +1,110 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AnnouncementListViewModel
+
+@{
+    ViewData["Title"] = "Campus Announcements & Circulars";
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <!-- PAGE HEADER -->
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4 pb-3 border-bottom">
+        <div>
+            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-semibold mb-2">
+                <i class="bi bi-megaphone-fill me-1"></i> OFFICIAL DISPATCHES & NOTICES
+            </span>
+            <h1 class="display-6 fw-bold text-dark mb-1">Campus Announcements</h1>
+            <p class="text-muted mb-0">Official university bulletins, department circulars, emergency alerts, and academic notices.</p>
+        </div>
+
+        <!-- SEARCH AND FILTER CONTROLS -->
+        <form method="get" asp-controller="Announcements" asp-action="Index" class="d-flex flex-wrap align-items-center gap-2">
+            <div class="input-group input-group-sm" style="min-width: 220px;">
+                <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" name="search" value="@Model.SearchTerm" class="form-control" placeholder="Search notices..." />
+            </div>
+
+            <select name="priority" class="form-select form-select-sm" style="width: 140px;" onchange="this.form.submit()">
+                <option value="ALL" selected="@(string.IsNullOrEmpty(Model.SelectedPriority) || Model.SelectedPriority == "ALL")">All Priorities</option>
+                <option value="URGENT" selected="@(Model.SelectedPriority == "URGENT")">🚨 Urgent</option>
+                <option value="HIGH" selected="@(Model.SelectedPriority == "HIGH")">⚠️ High</option>
+                <option value="NORMAL" selected="@(Model.SelectedPriority == "NORMAL")">📢 Normal</option>
+                <option value="LOW" selected="@(Model.SelectedPriority == "LOW")">ℹ️ Low</option>
+            </select>
+
+            <select name="type" class="form-select form-select-sm" style="width: 140px;" onchange="this.form.submit()">
+                <option value="ALL" selected="@(string.IsNullOrEmpty(Model.SelectedType) || Model.SelectedType == "ALL")">All Categories</option>
+                <option value="ACADEMIC" selected="@(Model.SelectedType == "ACADEMIC")">Academic</option>
+                <option value="NEWS" selected="@(Model.SelectedType == "NEWS")">News</option>
+                <option value="NOTICE" selected="@(Model.SelectedType == "NOTICE")">Notice</option>
+                <option value="ALERT" selected="@(Model.SelectedType == "ALERT")">Alert</option>
+                <option value="CAREER" selected="@(Model.SelectedType == "CAREER")">Career</option>
+                <option value="GENERAL" selected="@(Model.SelectedType == "GENERAL")">General</option>
+            </select>
+
+            <button type="submit" class="btn btn-sm btn-primary px-3 fw-semibold">Filter</button>
+
+            @if (!string.IsNullOrEmpty(Model.SearchTerm) || (!string.IsNullOrEmpty(Model.SelectedPriority) && Model.SelectedPriority != "ALL") || (!string.IsNullOrEmpty(Model.SelectedType) && Model.SelectedType != "ALL"))
+            {
+                <a asp-controller="Announcements" asp-action="Index" class="btn btn-sm btn-outline-secondary" title="Clear Filters">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            }
+        </form>
+    </div>
+
+    <!-- ANNOUNCEMENTS CONTENT -->
+    @if (!Model.Announcements.Any())
+    {
+        <div class="text-center py-5 my-4 bg-light rounded-4 p-5">
+            <div class="bg-white p-4 rounded-circle d-inline-block text-muted shadow-sm mb-3" style="width: 80px; height: 80px;">
+                <i class="bi bi-bell-slash fs-1 text-secondary"></i>
+            </div>
+            <h2 class="h5 fw-bold text-dark mb-1">No Announcements Found</h2>
+            <p class="text-muted small mb-3">There are no published circulars or notices matching the selected search and priority filters.</p>
+            <a asp-controller="Announcements" asp-action="Index" class="btn btn-outline-primary btn-sm rounded-pill px-4">
+                View All Published Notices
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var a in Model.Announcements)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 position-relative overflow-hidden transition-all @(a.IsUrgent ? "border-start border-4 border-danger" : "")">
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge @a.PriorityBadgeClass rounded-pill px-3 py-1 fw-semibold small">
+                                    <i class="bi @(a.IsUrgent ? "bi-exclamation-octagon-fill" : "bi-info-circle") me-1"></i>@a.Priority
+                                </span>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock me-1"></i>@a.PublishedDate.ToString("MMM dd, yyyy")
+                                </small>
+                            </div>
+
+                            <span class="text-primary small fw-semibold text-uppercase mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                                @a.AnnouncementType
+                            </span>
+
+                            <h2 class="h5 fw-bold text-dark mb-2">@a.Title</h2>
+
+                            <p class="text-muted small flex-grow-1 mb-4" style="line-height: 1.6;">
+                                @(a.Summary ?? (a.Content.Length > 140 ? a.Content.Substring(0, 137) + "..." : a.Content))
+                            </p>
+
+                            <div class="pt-3 border-top d-flex justify-content-between align-items-center mt-auto">
+                                <div class="small text-muted text-truncate me-2">
+                                    <i class="bi bi-building me-1"></i>@a.DepartmentName
+                                </div>
+                                <a asp-controller="Announcements" asp-action="Details" asp-route-id="@a.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold flex-shrink-0">
+                                    Read Memo <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

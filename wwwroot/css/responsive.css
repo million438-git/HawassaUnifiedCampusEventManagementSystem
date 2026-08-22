@@ -1,0 +1,327 @@
+/* =========================================================
+   HAWASSA UNIFIED CAMPUS EVENT MANAGEMENT SYSTEM (HUCEMS)
+   GLOBAL RESPONSIVE DESIGN SYSTEM
+   Supports: Desktop (1440px+), Laptop (1024px-1439px),
+             Tablet (768px-1023px), Mobile (320px-767px)
+   ========================================================= */
+
+/* 1. VIEWPORT & OVERFLOW SAFETY */
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* 2. MEDIA & FLUID ELEMENTS */
+img, svg, video, canvas, audio, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+/* 3. CONTAINERS & LAYOUTS */
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-xxl {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* 4. TABLES & HORIZONTAL SCROLL SAFETY */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md, 8px);
+}
+
+.table-responsive table {
+    width: 100%;
+    min-width: 550px;
+    margin-bottom: 0;
+}
+
+/* 5. FORMS & INPUTS */
+.form-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-control,
+.form-select,
+textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* 6. EVENT, JOB & COMMUNITY CARDS */
+.event-card,
+.job-card,
+.community-card,
+.stat-card,
+.dashboard-card {
+    width: 100%;
+    max-width: 100%;
+    transition: transform var(--transition, 0.25s ease), box-shadow var(--transition, 0.25s ease);
+}
+
+.event-card img,
+.event-card .card-img-top {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+/* 7. CALENDAR RESPONSIVE WRAPPER */
+.calendar-container,
+#calendar,
+.fc {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto;
+}
+
+/* =========================================================
+   TABLET DEVICES (max-width: 991.98px)
+   ========================================================= */
+@media (max-width: 991.98px) {
+    /* Navigation Collapse */
+    .navbar-collapse {
+        background: #ffffff;
+        padding: 1.25rem;
+        border-radius: var(--radius-md, 12px);
+        margin-top: 0.75rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.65rem 1rem;
+        border-radius: 8px;
+    }
+
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(111, 66, 193, 0.08);
+    }
+
+    /* Hero & Landing Sections */
+    .hero-section {
+        padding: 50px 0;
+        text-align: center;
+    }
+
+    .hero-section .hero-content {
+        margin-bottom: 2rem;
+    }
+
+    .hero-section .hero-actions {
+        justify-content: center;
+    }
+
+    /* Admin & Dashboard Grid Adaptations */
+    .admin-layout,
+    .dashboard-layout {
+        flex-direction: column;
+    }
+
+    .admin-sidebar,
+    .dashboard-sidebar {
+        width: 100% !important;
+        margin-bottom: 1.5rem;
+    }
+
+    .admin-content,
+    .dashboard-content {
+        width: 100% !important;
+    }
+
+    /* Two-Column Grid for Cards */
+    .events-grid,
+    .jobs-grid,
+    .community-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.25rem;
+    }
+}
+
+/* =========================================================
+   MOBILE DEVICES (max-width: 767.98px)
+   ========================================================= */
+@media (max-width: 767.98px) {
+    /* Typography Scaling */
+    html {
+        font-size: 15px;
+    }
+
+    h1, .h1 {
+        font-size: 1.85rem !important;
+        line-height: 1.3;
+    }
+
+    h2, .h2 {
+        font-size: 1.5rem !important;
+    }
+
+    h3, .h3 {
+        font-size: 1.25rem !important;
+    }
+
+    h4, .h4 {
+        font-size: 1.1rem !important;
+    }
+
+    /* Containers */
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    /* Single-Column Card Stacking */
+    .events-grid,
+    .jobs-grid,
+    .community-grid,
+    .stats-grid,
+    .management-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+
+    .event-card img,
+    .event-card .card-img-top {
+        height: 180px;
+    }
+
+    /* Forms on Mobile */
+    .form-container {
+        padding: 15px 10px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+
+    /* Mobile Buttons */
+    .btn-mobile-block,
+    .hero-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Admin & Dashboard Header Stack */
+    .admin-page-header,
+    .dashboard-header,
+    .superadmin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .admin-page-header .header-actions,
+    .dashboard-header .header-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .admin-page-header .header-actions .btn,
+    .dashboard-header .header-actions .btn {
+        width: 100%;
+    }
+
+    /* User Profile Header */
+    .profile-header-card {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .profile-avatar.large {
+        margin: 0 auto 1rem auto;
+    }
+
+    .user-stats {
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    /* Filter Toolbars */
+    .filter-toolbar {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .filter-toolbar .search-box,
+    .filter-toolbar .select-filter {
+        width: 100% !important;
+    }
+
+    /* FullCalendar Toolbar on Mobile */
+    .fc-toolbar {
+        flex-direction: column !important;
+        gap: 0.5rem;
+        align-items: center !important;
+    }
+
+    .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+/* =========================================================
+   SMALL MOBILE DEVICES (max-width: 480px)
+   ========================================================= */
+@media (max-width: 480px) {
+    h1, .h1 {
+        font-size: 1.6rem !important;
+    }
+
+    h2, .h2 {
+        font-size: 1.35rem !important;
+    }
+
+    .brand-text {
+        font-size: 1.1rem;
+    }
+
+    .card-body {
+        padding: 1rem !important;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+    }
+}

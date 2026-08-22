@@ -1,0 +1,77 @@
+@model HawassaUnifiedCampusEventManagementSystem.Models.AdminSessionsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Sessions & Devices";
+}
+
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-1">📱 Device & Session Management</h1>
+        <p class="text-muted small mb-0">Monitor active authenticated campus sessions, identify devices, and revoke suspicious access.</p>
+    </div>
+</div>
+
+<!-- =======================================================
+     ACTIVE SESSIONS TABLE
+     ======================================================= -->
+<div class="admin-card overflow-hidden">
+    <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+        <h2 class="h6 fw-bold text-dark mb-0"><i class="bi bi-shield-check me-2 text-success"></i>Active Logged-in Sessions</h2>
+        <span class="badge bg-success-subtle text-success border">@Model.TotalActive Online Sessions</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table admin-table" id="sessionsTable">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>IP Address</th>
+                    <th>Browser / Device Agent</th>
+                    <th>Logged In Since</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model.ActiveSessions)
+                {
+                    <tr>
+                        <td>
+                            <div class="fw-bold text-dark">@s.UserName</div>
+                        </td>
+                        <td><code>@(s.IpAddress ?? "127.0.0.1")</code></td>
+                        <td class="small text-muted" style="max-width: 320px;">
+                            <div class="text-truncate">@(s.UserAgent ?? "Web Browser")</div>
+                        </td>
+                        <td class="small text-muted">@s.CreatedAt.ToString("MMM dd, yyyy hh:mm tt")</td>
+                        <td>
+                            @if (s.IsCurrent)
+                            {
+                                <span class="badge bg-primary-subtle text-primary border">Current Session</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success-subtle text-success border">Active</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            @if (!s.IsCurrent)
+                            {
+                                <form asp-controller="Admin" asp-action="SessionRevoke" asp-route-id="@s.Id" method="post" class="d-inline" onsubmit="return confirm('Revoke this user session?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-2">
+                                        Revoke Access
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">You</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
